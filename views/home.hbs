@@ -1,0 +1,292 @@
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+        </div>
+        <div class="content-body">
+            <div class="row mb-1">
+                <div class="col-md-2 col-xl-2 col-lg-4 col-4">
+                    <a href="/admin/users/create/client" class="btn btn-success mb-1">اصافة عميل</a>
+                </div>
+                <div class="col-md-2 col-xl-2 col-lg-4 col-4">
+                    <a href="/admin/users/create/traders" class="btn btn-info mb-1"> اضافة تاجر</a>
+                </div>
+                <div class="col-md-2 col-xl-2 col-lg-4 col-4">
+                    <a href="/admin/cities/create" class="btn btn-primary mb-1">اضافة مدينة</a>
+                </div>
+                <div class="col-md-2 col-xl-2 col-lg-4 col-4">
+                    <a href="/admin/coupons/create" class="btn btn-danger mb-1">اضافة كوبون خصم</a>
+                </div>
+                <div class="col-md-2 col-xl-2 col-lg-4 col-4">
+                    <a href="/admin/cats/create" class="btn btn-warning mb-1">اضافة تصنيف</a>
+                </div>
+                <div class="col-md-2 col-xl-2 col-lg-4 col-4">
+                    <a href="/admin/countries/create" class="btn btn-dark mb-1">اضافة دولة</a>
+                </div>
+                <div class="col-12 col-md-12 col-xl-12 col-lg-12 text-center">
+                    <a href="#" class="btn btn-secondary btn-block" data-toggle="modal" data-target="#exampleModal"><i class="la la-send"></i> ارسال الاشعارات</a>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">الاشعارات</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form method="POST" action="">
+                    <div class="modal-body">
+                          <div class="form-group">
+                            <label for="exampleFormControlSelect1">اختر لمن تريد الارسال</label>
+                            <select class="form-control" id="exampleFormControlSelect1" name="type" required>
+                              {{!-- <option value="all"> الكل</option> --}}
+                              <option value="deleveries">مندوبين</option>
+                              <option value="vendors">تجار</option>
+                              <option value="users">عملاء</option>
+                            </select>
+                          </div>
+                          <div class="form-group">
+                              <label for="exampleInputPassword1">عنوان الرسالة</label>
+                              <input type="text" class="form-control" id="exampleInputPassword1" name="title" placeholder="عنوان الرسالة" required>
+                          </div>
+                          <div class="form-group">
+                              <label for="exampleInputPassword1">محتوي الرسالة</label>
+                              <textarea name="content" class="form-control" placeholder="محتوي الرسالة" col="50" row="20" required> </textarea>
+                          </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                        <button type="submit" class="btn btn-primary"> ارسال</button>
+                      </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+            <div id="crypto-stats-3" class="row">
+                <div class="col-xl-3 col-lg-6 col-12">
+                    <div class="card pull-up">
+                      <div class="card-content">
+                        <div class="card-body">
+                          <div class="media d-flex">
+                            <div class="media-body text-left">
+                              <h3 class="info">0</h3>
+                              <h6>الطلبات اليومية</h6>
+                            </div>
+                            <div>
+                              <i class="la la-bullhorn info font-large-2 float-right"></i>
+                            </div>
+                          </div>
+                          <div class="progress progress-sm mt-1 mb-0 box-shadow-2">
+                            <div class="progress-bar bg-gradient-x-info" role="progressbar" style="width:0%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xl-3 col-lg-6 col-12">
+                    <div class="card pull-up">
+                      <div class="card-content">
+                        <div class="card-body">
+                          <div class="media d-flex">
+                            <div class="media-body text-left">
+                              <h3 class="primary">0</h3>
+                              <h6>العملاء المسجلين اليوم</h6>
+                            </div>
+                            <div>
+                              <i class="la la-male primary font-large-2 float-right"></i>
+                            </div>
+                          </div>
+                          <div class="progress progress-sm mt-1 mb-0 box-shadow-2">
+                            <div class="progress-bar bg-gradient-x-primary" role="progressbar" style="width:%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xl-3 col-lg-6 col-12">
+                    <div class="card pull-up">
+                      <div class="card-content">
+                        <div class="card-body">
+                          <div class="media d-flex">
+                            <div class="media-body text-left">
+                              <h3 class="success">0</h3>
+                              <h6>الطلبات المكتملة</h6>
+                            </div>
+                            <div>
+                              <i class="la la-check success font-large-2 float-right"></i>
+                            </div>
+                          </div>
+                          <div class="progress progress-sm mt-1 mb-0 box-shadow-2">
+                            <div class="progress-bar bg-gradient-x-success" role="progressbar" style="width:0%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xl-3 col-lg-6 col-12">
+                    <div class="card pull-up">
+                      <div class="card-content">
+                        <div class="card-body">
+                          <div class="media d-flex">
+                            <div class="media-body text-left">
+                              <h3 class="warning">0</h3>
+                              <h6>الطلبات المعلقة</h6>
+                            </div>
+                            <div>
+                              <i class="la la-history warning font-large-2 float-right"></i>
+                            </div>
+                          </div>
+                          <div class="progress progress-sm mt-1 mb-0 box-shadow-2">
+                            <div class="progress-bar bg-gradient-x-warning" role="progressbar" style="width:0%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xl-3 col-lg-6 col-12">
+                    <div class="card pull-up">
+                      <div class="card-content">
+                        <div class="card-body">
+                          <div class="media d-flex">
+                            <div class="media-body text-left">
+                              <h3 class="danger">0</h3>
+                              <h6>الطلبات الملغاة</h6>
+                            </div>
+                            <div>
+                              <i class="la la-times danger font-large-2 float-right"></i>
+                            </div>
+                          </div>
+                          <div class="progress progress-sm mt-1 mb-0 box-shadow-2">
+                            <div class="progress-bar bg-gradient-x-danger" role="progressbar" style="width:0%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xl-3 col-lg-6 col-12">
+                    <div class="card pull-up">
+                      <div class="card-content">
+                        <div class="card-body">
+                          <div class="media d-flex">
+                            <div class="media-body text-left">
+                              <h3 class="success">0</h3>
+                              <h6>التجار المتصلين</h6>
+                            </div>
+                            <div>
+                              <i class="la la-tty success font-large-2 float-right"></i>
+                            </div>
+                          </div>
+                          <div class="progress progress-sm mt-1 mb-0 box-shadow-2">
+                            <div class="progress-bar bg-gradient-x-success" role="progressbar" style="width:%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xl-3 col-lg-6 col-12">
+                    <div class="card pull-up">
+                      <div class="card-content">
+                        <div class="card-body">
+                          <div class="media d-flex">
+                            <div class="media-body text-left">
+                              <h3 class="primary">0</h3>
+                              <h6>المواقع - المدن</h6>
+                            </div>
+                            <div>
+                              <i class="la la-tasks primary font-large-2 float-right"></i>
+                            </div>
+                          </div>
+                          <div class="progress progress-sm mt-1 mb-0 box-shadow-2">
+                            <div class="progress-bar bg-gradient-x-primary" role="progressbar" style="width:0%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xl-3 col-lg-6 col-12">
+                    <div class="card pull-up">
+                      <div class="card-content">
+                        <div class="card-body">
+                          <div class="media d-flex">
+                            <div class="media-body text-left">
+                              <h3 class="warning">0</h3>
+                              <h6>التجار المفعلين</h6>
+                            </div>
+                            <div>
+                              <i class="la la-users warning font-large-2 float-right"></i>
+                            </div>
+                          </div>
+                          <div class="progress progress-sm mt-1 mb-0 box-shadow-2">
+                            <div class="progress-bar bg-gradient-x-warning" role="progressbar" style="width:0%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+            </div>
+            <!-- Candlestick Multi Level Control Chart -->
+            <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h4 class="card-title">الاحصائيات</h4>
+                  <a class="heading-elements-toggle"><i class="la la-ellipsis-h font-medium-3"></i></a>
+                  <div class="heading-elements">
+                    <ul class="list-inline mb-0">
+                      <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                      <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                      <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="card-content collapse show">
+                  <div class="card-body">
+                    <div id="column-chart">
+                      <div style="position: relative;">
+                        <div dir="ltr" style="position: relative; width: 1117px; height: 400px;">
+                          <div aria-label="A chart." 
+                            style="position: absolute; left: 0px; top: 0px; width: 100%; height: 100%;">
+                            <svg width="1117" height="400" aria-label="A chart." style="overflow: hidden;">
+                              <defs id="_ABSTRACT_RENDERER_ID_21"><clipPath id="_ABSTRACT_RENDERER_ID_22">
+                                <rect x="56" y="25" width="1005" height="350"></rect></clipPath></defs>
+                                <rect x="0" y="0" width="1117" height="400" stroke="none" stroke-width="0" fill="#ffffff"></rect>
+                                <g><rect x="489" y="8" width="138" height="12" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect>
+                                <g><rect x="489" y="8" width="59" height="12" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect><g>
+                                  <text text-anchor="start" x="518" y="18.2" font-family="Arial" font-size="12" stroke="none" stroke-width="0" fill="#222222">الارباح</text></g>
+                                  <rect x="489" y="8" width="24" height="12" stroke="none" stroke-width="0" fill="#2494be"></rect></g>
+                                  <g><rect x="567" y="8" width="60" height="12" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect>
+                                  <g><text text-anchor="start" x="596" y="18.2" font-family="Arial" font-size="12" stroke="none" stroke-width="0" fill="#222222">الخسائر</text></g>
+                                  <rect x="567" y="8" width="24" height="12" stroke="none" stroke-width="0" fill="#f6b75a"></rect></g>
+                                  </g><g><rect x="56" y="25" width="1005" height="350" stroke="none" stroke-width="0" fill-opacity="0" fill="#ffffff"></rect>
+                                  <g clip-path="url(file:///home/gemy/Documents/Web/themes%20for%20web/ADMIN/adminTheme-master/html/rtl/vertical-compact-menu-template/google-bar-charts.html#_ABSTRACT_RENDERER_ID_22)">
+                                  <g><rect x="56" y="374" width="1005" height="1" stroke="none" stroke-width="0" fill="#e9e9e9"></rect>
+                                  <rect x="56" y="330" width="1005" height="1" stroke="none" stroke-width="0" fill="#e9e9e9"></rect>
+                                  <rect x="56" y="287" width="1005" height="1" stroke="none" stroke-width="0" fill="#e9e9e9"></rect>
+                                  <rect x="56" y="243" width="1005" height="1" stroke="none" stroke-width="0" fill="#e9e9e9"></rect>
+                                  <rect x="56" y="200" width="1005" height="1" stroke="none" stroke-width="0" fill="#e9e9e9"></rect>
+                                  <rect x="56" y="156" width="1005" height="1" stroke="none" stroke-width="0" fill="#e9e9e9"></rect>
+                                  <rect x="56" y="112" width="1005" height="1" stroke="none" stroke-width="0" fill="#e9e9e9"></rect>
+                                  <rect x="56" y="69" width="1005" height="1" stroke="none" stroke-width="0" fill="#e9e9e9"></rect>
+                                  <rect x="56" y="25" width="1005" height="1" stroke="none" stroke-width="0" fill="#e9e9e9"></rect>
+                                  <rect x="56" y="352" width="1005" height="1" stroke="none" stroke-width="0" fill="#f6f6f6"></rect>
+                                  <rect x="56" y="309" width="1005" height="1" stroke="none" stroke-width="0" fill="#f6f6f6"></rect>
+                                  <rect x="56" y="265" width="1005" height="1" stroke="none" stroke-width="0" fill="#f6f6f6"></rect>
+                                  <rect x="56" y="221" width="1005" height="1" stroke="none" stroke-width="0" fill="#f6f6f6"></rect>
+                                  <rect x="56" y="178" width="1005" height="1" stroke="none" stroke-width="0" fill="#f6f6f6"></rect>
+                                  <rect x="56" y="134" width="1005" height="1" stroke="none" stroke-width="0" fill="#f6f6f6"></rect>
+                                  <rect x="56" y="90" width="1005" height="1" stroke="none" stroke-width="0" fill="#f6f6f6"></rect>
+                                  <rect x="56" y="47" width="1005" height="1" stroke="none" stroke-width="0" fill="#f6f6f6"></rect>
+                                  </g><g><rect x="95" y="183" width="61" height="191" stroke="none" stroke-width="0" fill="#2494be">
+
+                                  </rect><rect x="296" y="216" width="61" height="158" stroke="none" stroke-width="0" fill="#2494be"></rect><rect x="496" y="166" width="62" height="208" stroke="none" stroke-width="0" fill="#2494be"></rect><rect x="697" y="83" width="62" height="291" stroke="none" stroke-width="0" fill="#2494be"></rect><rect x="898" y="35" width="62" height="339" stroke="none" stroke-width="0" fill="#2494be"></rect><rect x="157" y="320" width="62" height="54" stroke="none" stroke-width="0" fill="#f6b75a"></rect><rect x="358" y="310" width="62" height="64" stroke="none" stroke-width="0" fill="#f6b75a"></rect><rect x="559" y="277" width="62" height="97" stroke="none" stroke-width="0" fill="#f6b75a"></rect><rect x="760" y="281" width="61" height="93" stroke="none" stroke-width="0" fill="#f6b75a"></rect><rect x="961" y="257" width="61" height="117" stroke="none" stroke-width="0" fill="#f6b75a"></rect></g><g><rect x="56" y="374" width="1005" height="1" stroke="none" stroke-width="0" fill="#333333"></rect></g></g><g></g><g><g><text text-anchor="middle" x="156.9" y="391.7" font-family="Arial" font-size="12" stroke="none" stroke-width="0" fill="#222222">2011</text></g><g><text text-anchor="middle" x="357.70000000000005" y="391.7" font-family="Arial" font-size="12" stroke="none" stroke-width="0" fill="#222222">2012</text></g><g><text text-anchor="middle" x="558.5" y="391.7" font-family="Arial" font-size="12" stroke="none" stroke-width="0" fill="#222222">2013</text></g><g><text text-anchor="middle" x="759.3000000000001" y="391.7" font-family="Arial" font-size="12" stroke="none" stroke-width="0" fill="#222222">2014</text></g><g><text text-anchor="middle" x="960.1" y="391.7" font-family="Arial" font-size="12" stroke="none" stroke-width="0" fill="#222222">2015</text></g><g><text text-anchor="end" x="44" y="378.7" font-family="Arial" font-size="12" stroke="none" stroke-width="0" fill="#444444">0</text></g><g><text text-anchor="end" x="44" y="335.075" font-family="Arial" font-size="12" stroke="none" stroke-width="0" fill="#444444">200</text></g><g><text text-anchor="end" x="44" y="291.45" font-family="Arial" font-size="12" stroke="none" stroke-width="0" fill="#444444">400</text></g><g><text text-anchor="end" x="44" y="247.825" font-family="Arial" font-size="12" stroke="none" stroke-width="0" fill="#444444">600</text></g><g><text text-anchor="end" x="44" y="204.2" font-family="Arial" font-size="12" stroke="none" stroke-width="0" fill="#444444">800</text></g><g><text text-anchor="end" x="44" y="160.575" font-family="Arial" font-size="12" stroke="none" stroke-width="0" fill="#444444">1,000</text></g><g><text text-anchor="end" x="44" y="116.95" font-family="Arial" font-size="12" stroke="none" stroke-width="0" fill="#444444">1,200</text></g><g><text text-anchor="end" x="44" y="73.325" font-family="Arial" font-size="12" stroke="none" stroke-width="0" fill="#444444">1,400</text></g><g><text text-anchor="end" x="44" y="29.7" font-family="Arial" font-size="12" stroke="none" stroke-width="0" fill="#444444">1,600</text></g></g></g><g></g></svg><div aria-label="A tabular representation of the data in the chart." style="position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden;"><table><thead><tr><th>Year</th><th>Sales</th><th>Costs</th></tr></thead><tbody><tr><td>2011</td><td>880</td><td>250</td></tr><tr><td>2012</td><td>730</td><td>300</td></tr><tr><td>2013</td><td>960</td><td>450</td></tr><tr><td>2014</td><td>1,340</td><td>430</td></tr><tr><td>2015</td><td>1,560</td><td>540</td></tr></tbody></table></div></div></div><div aria-hidden="true" style="display: none; position: absolute; top: 410px; left: 1127px; white-space: nowrap; font-family: Arial; font-size: 12px;">Costs</div><div></div></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
