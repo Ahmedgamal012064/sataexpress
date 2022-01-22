@@ -26,11 +26,12 @@ Inseruser = function(req, res, next) {
     User.findOne({email:req.body.email},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
         if(err){
             console.log(err);
-            res.redirect('/');
+            res.redirect('/admin/users/'+req.body.type);
         }
         if(result){
             console.log('Email is already found');
-            return ;
+            req.flash('registeruser','Email is already found');
+            res.redirect('/admin/users/'+req.body.type);
         }
 
         const user = new User({
@@ -42,10 +43,10 @@ Inseruser = function(req, res, next) {
         user.save((error,result)=>{
             if(error){
                 console.log(error );
-                res.redirect('/');
+                res.redirect('/admin/users/'+req.body.type);
             }
             console.log(result);
-            res.redirect('/users');
+            res.redirect('/admin/users/'+req.body.type);
         });
     });
 }; //Insert User
@@ -65,7 +66,7 @@ updateuser = function(req, res, next) {
             return ;
         }
         console.log(result);
-        res.redirect('/users');
+        res.redirect('/admin/users/'+req.body.type);
     });
 }; //Updateuser
 
@@ -74,11 +75,11 @@ deleteuser = function(req, res, next) {
     User.deleteOne({_id:id},(error,result)=>{
         if(error){
             console.log(error );
-            res.redirect('/');
+            res.redirect('/admin/users/'+req.body.type);
             return ;
         }
             console.log(result);
-            res.redirect('/users');
+            res.redirect('/admin/users/'+req.body.type);
     });
 }; //Delete
 

@@ -5,8 +5,10 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 //const expressHbs = require('express-handlebars');
 const exsession = require('express-session');
+const flash   = require('connect-flash');
 const mongoose  = require('mongoose');
 
+//Define Routes
 var indexRouter      = require('./routes/index');
 var usersRouter      = require('./routes/users');
 var adminRouter      = require('./routes/admin');
@@ -30,6 +32,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(exsession({secret :  'token',saveUninitialized : false , resave : false}));
+app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
 //Connect to database
 mongoose.connect('mongodb+srv://sataexpress:sataexpress%402203@cluster0.kkwcw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',{ useNewUrlParser: true},(err)=>{

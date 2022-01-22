@@ -9,15 +9,16 @@ router.get('/', function(req, res, next) {
 
 //start login route
 router.get('/Login', function(req, res, next) {
-  res.render('auth/login', { title: 'Login' , layout: 'layout/login' , error : req.session.error});
+  var errors = req.flash('login-error');
+  res.render('auth/login', { title: 'Login' , layout: 'layout/login' , error : errors});
 });
 
 router.post('/Login',[
     // Email must be an email and not empty
     check('email').isEmail().normalizeEmail().withMessage('Email In valid') ,
     check('email').notEmpty().withMessage('Email Empty') ,
-    check('password').notEmpty() ,
-    check('password').isLength({min:5}) ,
+    check('password').notEmpty().withMessage('Password Empty') ,
+    check('password').isLength({min:5}).withMessage('password must length greater than 5') ,
     // check('confirm-password').custom((value , {req})=>{
     //     if(value != req.body.password){
     //       throw new Error('Password confirm Not match');
@@ -25,13 +26,16 @@ router.post('/Login',[
     //     return true;
     // })
 ], function(req, res, next) {
-  res.redirect('admin');
-  return ;
+  // res.redirect('admin');
+  // return ;
     const errors = validationResult(req);
     if(!errors.isEmpty()){
-      req.session.error = errors.array();
-      res.redirect('/Login');
-      //return res.status(500).json({ errors: errors.array() });
+      var messages = [];
+      for(var i = 0 ; i<errors.errors.length ; i++){
+        messages.push(errors.errors[i].msg);
+      }
+      req.flash('login-error' ,messages);
+      res.redirect('Login');
     }
     req.session.success = 'Login Successfully';
     res.redirect('admin');

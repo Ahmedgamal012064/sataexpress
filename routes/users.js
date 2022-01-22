@@ -20,7 +20,8 @@ router.get('/create/:type', function(req, res, next) {
   }else{
     res.redirect('/admin');
   }
-  res.render('users/create',{title : 'Create-User',type:type,type2:req.params.type, layout: 'layout/admin' });
+  var errors = req.flash('registeruser');
+  res.render('users/create',{title : 'Create-User',error:errors,type:type,type2:req.params.type, layout: 'layout/admin' });
 });
 router.post('/insert', usercontrller.Inseruser);
 /*********end create user*** */
