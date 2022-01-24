@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 const { check, validationResult } = require('express-validator');
+const Admin = require('../models/admin');
+const passport = require('passport');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -10,35 +12,38 @@ router.get('/', function(req, res, next) {
 //start login route
 router.get('/Login', function(req, res, next) {
   var errors = req.flash('login-error');
-  res.render('auth/login', { title: 'Login' , layout: 'layout/login' , error : errors});
+  authuser = req.user;
+  res.render('auth/login', { title: 'Login' , layout: 'layout/login' ,authuser:authuser, error : errors});
 });
 
 router.post('/Login',[
-    // Email must be an email and not empty
-    check('email').isEmail().normalizeEmail().withMessage('Email In valid') ,
-    check('email').notEmpty().withMessage('Email Empty') ,
-    check('password').notEmpty().withMessage('Password Empty') ,
-    check('password').isLength({min:5}).withMessage('password must length greater than 5') ,
-    // check('confirm-password').custom((value , {req})=>{
-    //     if(value != req.body.password){
-    //       throw new Error('Password confirm Not match');
-    //     }
-    //     return true;
-    // })
-], function(req, res, next) {
-  // res.redirect('admin');
-  // return ;
-    const errors = validationResult(req);
-    if(!errors.isEmpty()){
-      var messages = [];
-      for(var i = 0 ; i<errors.errors.length ; i++){
-        messages.push(errors.errors[i].msg);
+  check('email').notEmpty().isEmail().withMessage('Email In valid'),
+  check('password').notEmpty().withMessage('password In valid')
+],(req,res,next)=>{
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+      const messages = [];
+      for(var i = 0 ; i < errors.errors.length ; i++){
+          messages.push(errors.errors[i].msg);
       }
-      req.flash('login-error' ,messages);
-      res.redirect('Login');
+      req.flash('login-error', messages)
+      res.redirect('Login'); 
+      return ;
     }
-    req.session.success = 'Login Successfully';
-    res.redirect('admin');
+    next();
+},passport.authenticate('local-signin', {
+  session : false ,
+  successRedirect: '/admin',
+  failureRedirect: '/Login',
+  failureFlash: true
+}), function (req, res, next) {
+  if(req.session.oldUrl) {
+      const oldUrl = req.session.oldUrl;
+      req.session.oldUrl = null;
+      res.redirect(oldUrl);
+  } else {
+      res.redirect('/admin');
+  }
 });
 //end login route
 

@@ -40,22 +40,22 @@ router.post('/permission/store', admincontroller.updateadmins);
 router.get('/delete/:id', admincontroller.deleteadmins);
 
 router.get('/logout', function (req, res, next) {  //router.get('/logout', isLoggedIn, function (req, res, next) {
-//req.logout();
-res.redirect('/Login');
+    req.logout();
+    res.redirect('/Login');
 });
 
 function isLoggedIn(req, res, next) {
 if(req.isAuthenticated()) {
     return next();
 }
-res.redirect('/');
+res.redirect('/Login');
 }
 
 function notLoggedIn(req, res, next) {
 if(!req.isAuthenticated()) {
     return next();
 }
-res.redirect('/');
+res.redirect('/admin');
 }
 
 module.exports = router;
