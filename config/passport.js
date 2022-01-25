@@ -32,3 +32,24 @@ passport.use('local-signin',new localStrategy({
         return done(null, user);
     })
 }));
+
+
+passport.use('local-signup',new localStrategy({
+    usernameField: 'email',
+    passwordField: 'password',
+    passReqToCallback: true
+},(req, email, password, done)=>{
+
+    Admin.findOne({'email': email}, function (err, user) {
+        if(err) {
+            return done(err);
+        }
+        if(user) {
+            return done(null, false, req.flash('signup-error', 'This Email already excit'));
+        }
+        if( !user.validPassword(password)) {
+            return done(null, false, req.flash('signup-error', 'Wrong password'));
+        }
+        return done(null, user);
+    })
+}));

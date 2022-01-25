@@ -36,15 +36,7 @@ router.post('/Login',[
   successRedirect: '/admin',
   failureRedirect: '/Login',
   failureFlash: true
-}), function (req, res, next) {
-  if(req.session.oldUrl) {
-      const oldUrl = req.session.oldUrl;
-      req.session.oldUrl = null;
-      res.redirect(oldUrl);
-  } else {
-      res.redirect('/admin');
-  }
-});
+}));
 //end login route
 
 

@@ -38,7 +38,7 @@ This files table contents are outlined below>>>>>
 /* Color Variable */
 /* Font Variable */
 body {
-  font-family: "Lato", sans-serif;
+  font-family: 'Cairo', sans-serif;
   color: #545454;
   line-height: 1.8;
   font-size: 17px;

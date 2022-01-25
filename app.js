@@ -8,8 +8,9 @@ const mongoose  = require('mongoose');
 const exsession = require('express-session');
 const flash   = require('connect-flash');
 const passport  = require('passport');
+const cors =  require('cors');
 
-//Define view Routes
+//Start Define view Routes
 var indexRouter      = require('./routes/index');
 var usersRouter      = require('./routes/users');
 var adminRouter      = require('./routes/admin');
@@ -20,13 +21,18 @@ var catRouter        = require('./routes/cat');
 var subcatRouter     = require('./routes/subcat');
 var couponRouter     = require('./routes/coupon');
 var orderRouter      = require('./routes/order');
-//Define Api Routes
+//End Define view Routes
+//Start Define Api Routes
+var usersRouterapi      = require('./routes/api/users');
+var indexRouterapi      = require('./routes/api/index');
+//End Define Api Routes
 
 var app = express();
+app.use(cors());
 //Connect to database
 mongoose.connect('mongodb+srv://sataexpress:sataexpress%402203@cluster0.kkwcw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',{ useNewUrlParser: true},(err)=>{
   if(err){
-    console.log("Error : "+err);
+    console.log("Error MongoDB : "+err);
   }else{
     console.log('MongoDB database connection successfully');
 }
@@ -50,6 +56,7 @@ app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
+//Start Define Views File Route
 app.use('/', indexRouter);
 app.use('/admin/users', usersRouter);
 app.use('/admin',adminRouter);
@@ -60,6 +67,11 @@ app.use('/admin/cats',catRouter);
 app.use('/admin/subcats',subcatRouter); 
 app.use('/admin/coupons',couponRouter); 
 app.use('/admin/orders',orderRouter);
+//End Define Views File Route
+//Start Define Apis File Route
+app.use('/api',indexRouterapi);
+app.use('/api/users',usersRouterapi);
+//End Define Apis File Route
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
