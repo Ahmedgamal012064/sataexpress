@@ -5,14 +5,14 @@ const { check, validationResult } = require('express-validator');
 const Admin = require('../models/admin');
 const admincontroller = require('../controller/admincontroller');
 
-router.get('/', function(req, res, next) {
+router.get('/', isLoggedIn,function(req, res, next) {
     res.render('home', { title: 'Admin Home', layout: 'layout/admin' });
 });
-router.get('/Profile', function(req, res, next) {
+router.get('/Profile', isLoggedIn,function(req, res, next) {
     res.render('auth/profile', { title: 'Admin Profile', layout: 'layout/admin' });
 });
 
-router.post('/Update-Profile', function(req, res, next) {
+router.post('/Update-Profile', isLoggedIn,function(req, res, next) {
     res.send('update profile');
 });
 
@@ -39,23 +39,17 @@ router.post('/permission/store', admincontroller.updateadmins);
 
 router.get('/delete/:id', admincontroller.deleteadmins);
 
-router.get('/logout', function (req, res, next) {  //router.get('/logout', isLoggedIn, function (req, res, next) {
-    req.logout();
+router.get('/logout', isLoggedIn,function (req, res, next) {  //router.get('/logout', isLoggedIn, function (req, res, next) {
+    req.logOut();
     res.redirect('/Login');
 });
 
 function isLoggedIn(req, res, next) {
-if(req.isAuthenticated()) {
-    return next();
-}
-res.redirect('/Login');
-}
-
-function notLoggedIn(req, res, next) {
 if(!req.isAuthenticated()) {
-    return next();
+    res.redirect('/Login');
+    return ;
 }
-res.redirect('/admin');
+return next();
 }
 
 module.exports = router;

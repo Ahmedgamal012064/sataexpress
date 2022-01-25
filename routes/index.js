@@ -40,25 +40,4 @@ router.post('/Login',[
 //end login route
 
 
-// router.get('/info/:id', function(req, res, next) {
-//   res.render('info', { id: req.params.id });
-// });
-
-// router.post('/submit',[
-//   // Email must be an email and not empty
-//   check('email').isEmail().normalizeEmail().withMessage('Email In valid') ,
-//   check('email').notEmpty().withMessage('Email Empty') ,
-// ], function(req, res, next) {
-//   const errors = validationResult(req);
-//   if(!errors.isEmpty()){
-//     //req.session.error = errors.array();
-//     //res.redirect('/');
-//     return res.status(500).json({ errors: errors.array() });
-//   }
-//     req.session.error = false;
-//     res.redirect('/info/'+req.body.email);
-//     //res.render('info', { id: req.params.id });
-// });
-
-
 module.exports = router;

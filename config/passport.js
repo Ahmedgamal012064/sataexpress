@@ -29,6 +29,7 @@ passport.use('local-signin',new localStrategy({
         if( !user.validPassword(password)) {
             return done(null, false, req.flash('login-error', 'Wrong password'));
         }
+        console.log(user);
         return done(null, user);
     })
 }));
@@ -47,9 +48,15 @@ passport.use('local-signup',new localStrategy({
         if(user) {
             return done(null, false, req.flash('signup-error', 'This Email already excit'));
         }
-        if( !user.validPassword(password)) {
-            return done(null, false, req.flash('signup-error', 'Wrong password'));
-        }
-        return done(null, user);
+        const newuser = new  User({
+            email : email ,
+            password : new User().encryptPassword(password) ,
+        });
+        newuser.save((err , user)=>{
+            if(err){
+                return done(err);
+            }
+            return done(null,user);
+        });
     })
 }));
