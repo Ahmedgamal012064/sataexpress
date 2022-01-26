@@ -45,11 +45,12 @@ router.get('/logout', isLoggedIn,function (req, res, next) {  //router.get('/log
 });
 
 function isLoggedIn(req, res, next) {
-if(!req.isAuthenticated()) {
-    res.redirect('/Login');
-    return ;
-}
-return next();
+    if(!req.isAuthenticated()) {
+        console.log(req.isAuthenticated());
+        res.redirect('/Login');
+        return ;
+    }
+    return next();
 }
 
 module.exports = router;

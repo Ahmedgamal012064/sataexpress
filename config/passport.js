@@ -14,6 +14,7 @@ passport.deserializeUser(function (id, done) {
 });
 
 passport.use('local-signin',new localStrategy({
+    session : false ,
     usernameField: 'email',
     passwordField: 'password',
     passReqToCallback: true
@@ -29,7 +30,6 @@ passport.use('local-signin',new localStrategy({
         if( !user.validPassword(password)) {
             return done(null, false, req.flash('login-error', 'Wrong password'));
         }
-        console.log(user);
         return done(null, user);
     })
 }));

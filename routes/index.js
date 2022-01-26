@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
 });
 
 //start login route
-router.get('/Login', function(req, res, next) {
+router.get('/Login',notLoggedIn,function(req, res, next) {
   var errors = req.flash('login-error');
   authuser = req.user;
   res.render('auth/login', { title: 'Login' , layout: 'layout/login' ,authuser:authuser, error : errors});
@@ -32,12 +32,20 @@ router.post('/Login',[
     }
     next();
 },passport.authenticate('local-signin', {
-  session : false ,
   successRedirect: '/admin',
   failureRedirect: '/Login',
   failureFlash: true
 }));
 //end login route
+
+function notLoggedIn(req, res, next) {
+  if(req.isAuthenticated()) {
+    console.log(req.isAuthenticated());
+    res.redirect('/admin');
+    return ;
+  }
+  return next();
+}
 
 
 module.exports = router;

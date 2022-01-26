@@ -8,6 +8,7 @@ const mongoose  = require('mongoose');
 const exsession = require('express-session');
 const flash   = require('connect-flash');
 const passport  = require('passport');
+const jwt   = require('jsonwebtoken');
 const cors =  require('cors');
 
 //Start Define view Routes
