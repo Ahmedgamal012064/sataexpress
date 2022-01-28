@@ -4,11 +4,12 @@ const { check, validationResult } = require('express-validator');
 const Countery = require('../../models/countery');
 const User     = require('../../models/user');
 const Cat      = require('../../models/cat');
+const upload   = require('../../middleware/upload');
 const jwt   = require('jsonwebtoken');
 const JWT_SECRET = "sata express";
 
 router.get('/counteries', function(req, res, next) {
-    Countery.find({},'name',(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
+    Countery.find({},'name photo',(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
         if(err){
             res.status(400).json({
                 'status' : false ,
@@ -26,7 +27,7 @@ router.get('/counteries', function(req, res, next) {
 });
 
 router.get('/locations', function(req, res, next) {
-    Countery.find({},'lat lang',(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
+    Countery.find({},'name lat lang',(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
         if(err){
             res.status(400).json({
                 'status' : false ,
@@ -67,11 +68,11 @@ router.post('/login', function(req, res, next) {
         if(err){
             res.status(400).json({
                 'status' : false ,
-                'data'   : err ,
+                'error'   : err ,
                 'meg'    : 'error'
             });
         }
-       
+
         if(result){
             if( !result.validPassword(req.body.password)) {
                 res.status(400).json({
@@ -79,7 +80,7 @@ router.post('/login', function(req, res, next) {
                     'meg'    : 'Password Wrong'
                 });
             }
-            let token = jwt.sign({phone:req.body.phone},JWT_SECRET ,{expiresIn : '1h'});
+            let token = jwt.sign({id:result._id},JWT_SECRET ,{expiresIn : '1h'});
             res.status(200).json({
                 'status' : true ,
                 'data'   : result ,
@@ -133,7 +134,7 @@ router.post('/signup-verify-mobile', function(req, res, next) {
     }
 });
 
-router.post('/signup-complete', function(req, res, next) {
+router.post('/signup-complete', upload.array('images[]',3),function(req, res, next) { //upload.single('image')
     User.findOne({email:req.body.email},(err , result)=>{
         if(err){
             res.status(500).json({
@@ -159,10 +160,25 @@ router.post('/signup-complete', function(req, res, next) {
             birthday: req.body.birthday,
             gender: req.body.gender,
             password : new User().encryptPassword(req.body.password),
+            token    : req.body.token ,
+            address : req.body.address ,
+            lat: req.body.lat ? req.body.lat  : 0 ,
+            lang: req.body.lang ? req.body.lat  : 0,
         });
+        // if(req.file){
+        //     user.images = req.file.path;
+        // }
+        if(req.files){
+            let path = '';
+            req.files.forEach(function(files,index,arr){
+                path = path + files.path + ',';
+            });
+            path = path.substring(0,path.lastIndexOf(","));
+            user.images = path;
+        }
         user.save().
         then(result=>{
-            let token = jwt.sign({phone  : req.body.phone},JWT_SECRET ,{expiresIn : '1h'});
+            let token = jwt.sign({id  : user._id},JWT_SECRET ,{expiresIn : '1h'});
             res.status(200).json({
                 'status' : true ,
                 'data'   : result ,

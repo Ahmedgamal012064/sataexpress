@@ -31,7 +31,7 @@ var indexRouterapi      = require('./routes/api/index');
 var app = express();
 app.use(cors());
 //Connect to database
-mongoose.connect('mongodb://sataexpress:sataexpress%402203@cluster0-shard-00-00.kkwcw.mongodb.net:27017,cluster0-shard-00-01.kkwcw.mongodb.net:27017,cluster0-shard-00-02.kkwcw.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-hnp1k7-shard-0&authSource=admin&retryWrites=true&w=majority',{ useNewUrlParser: true},(err)=>{
+mongoose.connect('mongodb://sataexpress:sataexpress%402203@cluster0-shard-00-00.kkwcw.mongodb.net:27017,cluster0-shard-00-01.kkwcw.mongodb.net:27017,cluster0-shard-00-02.kkwcw.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-hnp1k7-shard-0&authSource=admin&retryWrites=true&w=majority',{ useNewUrlParser: true},(err)=>{ //mongodb+srv://sataexpress:sataexpress%402203@cluster0.kkwcw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
   if(err){
     console.log("Error MongoDB : "+err);
   }else{
@@ -48,6 +48,7 @@ app.set('view engine', 'hbs');
 
 app.use(logger('dev'));
 app.use(express.json());
+app.use('/uploads',express.static('uploads'));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(exsession({secret :  'token',saveUninitialized : false , resave : true}));

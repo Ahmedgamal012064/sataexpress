@@ -4,13 +4,14 @@ var router = express.Router();
 const { check, validationResult } = require('express-validator');
 const Countery = require('../models/countery');
 const counterycontrller  = require('../controller/counterycontroller');
+const upload   = require('../middleware/upload');
 
 router.get('/', counterycontrller.allcounteries);
 
 router.get('/create', function(req, res, next) {
     res.render('countries/create', { title: 'Create-Counteries', layout: 'layout/admin' });
 });
-router.post('/store', counterycontrller.Insercountery);
+router.post('/store', upload.single('photo'),counterycontrller.Insercountery);
 
 router.get('/edit/:id', function(req, res, next) {
     Countery.findOne({_id:req.params.id},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)

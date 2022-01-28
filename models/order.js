@@ -6,18 +6,19 @@ const orderSchema = mongoose.Schema({
     user: {type: Schema.Types.ObjectId ,  ref: 'User'},
     delvery: {type: Schema.Types.ObjectId ,  ref: 'User'},
     trader: {type: Schema.Types.ObjectId ,  ref: 'User'},
-    status: {type: Number, required: true},
+    status: {type: String, required: true},
     price: {type: Number, required: true},
-    reply: {type: String, required: true},
-    lat: {type: String, required: true},
-    lang: {type: String, required: true},
+    reply: {type: String},
+    weight: {type: Number, required: true },
+    cat: {type: Schema.Types.ObjectId ,  ref: 'Cat'},
 
     username: {type: String, required: true},
     userphone: {type: String, required: true},
-    userlat: {type: String, required: true},
-    userlang: {type: String, required: true},
     useremail: {type: String, required: true},
     usernotes: {type: String, required: true},
+    address: {type: String},
+    lat: {type: String, required: true},
+    lang: {type: String, required: true},
     
 },{ timestamps: true });
 

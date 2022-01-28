@@ -18,6 +18,11 @@ Insercountery = function(req, res, next) {
         lat:  req.body.lat ,
         lang:  req.body.lang
     });
+
+
+    if(req.file){
+        countery.photo = req.file.path;
+    }
     countery.save((error,result)=>{
         if(error){
             console.log("Error :"+ error );
