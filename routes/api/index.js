@@ -3,6 +3,7 @@ var router = express.Router();
 const { check, validationResult } = require('express-validator');
 const Countery = require('../../models/countery');
 const User     = require('../../models/user');
+const Cat      = require('../../models/cat');
 const jwt   = require('jsonwebtoken');
 const JWT_SECRET = "sata express";
 
@@ -24,15 +25,42 @@ router.get('/counteries', function(req, res, next) {
     });
 });
 
-// router.post('/auth',function(req,res,next){
-//     let token = req.header('Authorization');
-//     try{
-//         let data = jwt.verify(token,JWT_SECRET);
-//         res.json(data.phone);
-//     }catch(err){
-//         res.json({"msg" : "unauth"});
-//     }
-// });
+router.get('/locations', function(req, res, next) {
+    Countery.find({},'lat lang',(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
+        if(err){
+            res.status(400).json({
+                'status' : false ,
+                'data'   : err ,
+                'meg'    : 'error'
+            });
+        }
+        console.log(result);
+        res.status(200).json({
+            'status' : true ,
+            'data'   : result ,
+            'meg'    : 'successfully'
+        });
+    });
+});
+
+router.get('/cats', function(req, res, next) {
+    Cat.find({},'name',(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
+        if(err){
+            res.status(400).json({
+                'status' : false ,
+                'data'   : err ,
+                'meg'    : 'error'
+            });
+        }
+        console.log(result);
+        res.status(200).json({
+            'status' : true ,
+            'data'   : result ,
+            'meg'    : 'successfully'
+        });
+    });
+});
+
 
 router.post('/login', function(req, res, next) {
     User.findOne({phone:req.body.phone},(err , result)=>{ 
@@ -43,13 +71,14 @@ router.post('/login', function(req, res, next) {
                 'meg'    : 'error'
             });
         }
-        if( !result.validPassword(req.body.password)) {
-            res.status(400).json({
-                'status' : false ,
-                'meg'    : 'Password Wrong'
-            });
-        }
+       
         if(result){
+            if( !result.validPassword(req.body.password)) {
+                res.status(400).json({
+                    'status' : false ,
+                    'meg'    : 'Password Wrong'
+                });
+            }
             let token = jwt.sign({phone:req.body.phone},JWT_SECRET ,{expiresIn : '1h'});
             res.status(200).json({
                 'status' : true ,
@@ -58,6 +87,7 @@ router.post('/login', function(req, res, next) {
                 'meg'    : 'login successfully'
             });
         }else{
+            //check email
             res.status(400).json({
                 'status' : false ,
                 'meg'    : 'User Not Found'
@@ -132,7 +162,7 @@ router.post('/signup-complete', function(req, res, next) {
         });
         user.save().
         then(result=>{
-            let token = jwt.sign(result,JWT_SECRET ,{expiresIn : '1h'});
+            let token = jwt.sign({phone  : req.body.phone},JWT_SECRET ,{expiresIn : '1h'});
             res.status(200).json({
                 'status' : true ,
                 'data'   : result ,

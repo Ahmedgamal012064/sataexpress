@@ -5,14 +5,16 @@ const userSchema = mongoose.Schema({
     name: {type: String, required: true},
     phone: {type: String, required: true},
     email: {type: String, required: true},
-    countery: {type: Schema.Types.ObjectId ,  ref: 'Countery'},
+    countery: {type: String},
     type: {type: String, required: true},
     status: {type: Number, required: true},
     password: {type: String, required: true} ,
     birthday: {type: Date},
     gender: {type: String},
     token: {type: String},
-   // image: {type: String, required: true},
+    images: {type: String},
+    lat: {type: String},
+    lang: {type: String},
 });
 
 

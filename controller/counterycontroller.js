@@ -2,7 +2,7 @@ const Countery = require('../models/countery');
 
 allcounteries = function(req, res, next) {
     //get all countries
-    Countery.find({},'name',(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
+    Countery.find({},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
         if(err){
             console.log(err);
             res.redirect('/admin/countries');
@@ -14,7 +14,9 @@ allcounteries = function(req, res, next) {
 
 Insercountery = function(req, res, next) {
     const countery = new Countery({
-        name : req.body.name
+        name : req.body.name ,
+        lat:  req.body.lat ,
+        lang:  req.body.lang
     });
     countery.save((error,result)=>{
         if(error){
@@ -30,6 +32,8 @@ updatecountery = function(req, res, next) {
     const id = req.body.id;
     const updatecountery = {
         name : req.body.name,
+        lat:  req.body.lat ,
+        lang:  req.body.lang
     }
     Countery.updateOne({_id:id}, {$set : updatecountery},(error , result)=>{
         if(error){
