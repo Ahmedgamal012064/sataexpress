@@ -52,20 +52,22 @@
                                             </tr>
                                             </thead>
                                             <tbody>
+                                                {{#each users as |user|}}
                                                     <tr>
-                                                        <td>2021</td>
-                                                        <td>ahmed</td>
-                                                        <td>+201206472722</td>
-                                                        <td>sataexpress@gmail.com</td>
-                                                        <td>cairo</td>
+                                                        <td>{{user._id}}</td>
+                                                        <td>{{user.name}}</td>
+                                                        <td>{{user.phone}}</td>
+                                                        <td>{{user.email}}</td>
+                                                        <td>{{user.countery.name}}</td>
                                                         <td>
                                                             <div class="btn-group" role="group"
                                                                 aria-label="Basic example">
-                                                                <a href="/admin/users/detail/1"
+                                                                <a href="/admin/users/detail/{{user._id}}"
                                                                 class="btn btn-outline-primary btn-min-width box-shadow-3 mr-1 mb-1">تفاصيل</a>
                                                             </div>
                                                         </td>
                                                     </tr>
+                                                {{/each}}
                                             </tbody>
                                         </table>
                                     </div>

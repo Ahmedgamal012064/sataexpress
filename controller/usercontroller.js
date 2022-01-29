@@ -2,35 +2,39 @@ const User = require('../models/user');
 
 allusers = function(req, res, next) {
     //get all users
-      User.find({},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
+        var type;
+        var type2;
+        if(req.params.type == 'client'){
+            type2 = "user";
+            type = 'العملاء';
+        }else if(req.params.type == 'traders'){
+            type2 = "vendor";
+            type = 'التجار';
+        }else if(req.params.type == 'deleveries'){
+            type2 = "delevery";
+            type = 'المندوبين';
+        }else{
+            res.redirect('/admin');
+        }
+      User.find({type : type2},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
         if(err){
             console.log(err);
             res.redirect('/');
         }
         console.log(result);
-        var type;
-        if(req.params.type == 'client'){
-            type = 'العملاء';
-        }else if(req.params.type == 'traders'){
-            type = 'التجار';
-        }else if(req.params.type == 'deleveries'){
-            type = 'المندوبين';
-        }else{
-            res.redirect('/admin');
-        }
         res.render('users/index',{title:'All Users',type:type, users : result,layout: 'layout/admin' });
-    });
+    }).populate('countery');
 }; //all users
 
 Inseruser = function(req, res, next) {
-    User.findOne({email:req.body.email},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
+    User.findOne({phone:req.body.phone},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
         if(err){
             console.log(err);
             res.redirect('/admin/users/'+req.body.type);
         }
         if(result){
-            console.log('Email is already found');
-            req.flash('registeruser','Email is already found');
+            console.log('Phone is already found');
+            req.flash('registeruser','Phone is already found');
             res.redirect('/admin/users/'+req.body.type);
         }
 
@@ -38,7 +42,8 @@ Inseruser = function(req, res, next) {
             name : req.body.name,
             type : req.body.type,
             email : req.body.email,
-            password : req.body.password,
+            phone : req.body.phone,
+            password : new User().encryptPassword(req.body.password),
         });
         user.save((error,result)=>{
             if(error){
@@ -55,9 +60,9 @@ updateuser = function(req, res, next) {
     const id = req.body.id;
     const updateuser = {
         email : req.body.email,
-        type : req.body.type,
+        phone : req.body.phone,
         name : req.body.name,
-        password : req.body.password,
+        password : new User().encryptPassword(req.body.password),
     }
     User.updateOne({_id:id}, {$set : updateuser},(error , result)=>{
         if(error){
