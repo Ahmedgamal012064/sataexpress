@@ -11,7 +11,7 @@ function sendmessage(token , title , body){
         notification: {
             title: title, 
             body : body 
-        }
+        } 
     }, function(err, response){
         if (err) {
             console.log("Something has gone wrong!");
