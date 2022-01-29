@@ -38,7 +38,7 @@ updatecountery = function(req, res, next) {
     const id = req.body.id;
     const updatecountery = {
         name : req.body.name,
-         code : req.body.code , 
+        code : req.body.code , 
         lat:  req.body.lat ,
         lang:  req.body.lang
     }

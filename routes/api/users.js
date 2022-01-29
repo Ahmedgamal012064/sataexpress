@@ -21,6 +21,7 @@ router.post('/create-order', authapi,function(req, res, next) {
         userphone : req.body.userphone,
         useremail : req.body.useremail,
         usernotes : req.body.usernotes,
+        address :  req.body.address,
         lat : req.body.lat,
         lang: req.body.lang,
     });
@@ -58,8 +59,8 @@ router.post('/create-order', authapi,function(req, res, next) {
     });
 });
 
-router.get('/orders-user',authapi,function(req, res, next) {
-    Order.find({user:req.user.id},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
+router.get('/orders-user/:status',authapi,function(req, res, next) {
+    Order.find({user:req.user.id , status : req.params.status},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
         if(err){
             return res.status(400).json({
                 'status' : false ,
@@ -94,6 +95,24 @@ router.get('/orders-vendor',authapi,function(req, res, next) {
     }).populate('user');
 });
 
+router.get('/orders-vendor-pending',authapi,function(req, res, next) {
+    Order.find({status:"pendingvendor"},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
+        if(err){
+            return res.status(400).json({
+                'status' : false ,
+                'data'   : err ,
+                'meg'    : 'error'
+            });
+        }
+        console.log(result);
+        return res.status(200).json({
+            'status' : true ,
+            'data'   : result ,
+            'meg'    : 'successfully'
+        });
+    }).populate('user');
+});
+
 router.get('/orders-delevery',authapi,function(req, res, next) {
     Order.find({delvery:req.user.id},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
         if(err){
@@ -112,13 +131,26 @@ router.get('/orders-delevery',authapi,function(req, res, next) {
     }).populate('user');
 });
 
+router.get('/orders-delevery-pending',authapi,function(req, res, next) {
+    Order.find({status : "pendingdelevery"},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
+        if(err){
+            return res.status(400).json({
+                'status' : false ,
+                'data'   : err ,
+                'meg'    : 'error'
+            });
+        }
+        console.log(result);
+        return res.status(200).json({
+            'status' : true ,
+            'data'   : result ,
+            'meg'    : 'successfully'
+        });
+    }).populate('user');
+});
+
 router.get('/notifications',authapi,function(req, res, next) {
-    // var notification = new Notification({
-    //     title: "order send to you",
-    //     body: "open app to see more details",
-    //     user: req.user.id,
-    // });
-    // return notification.save();
+    //return senmessge("fvPUyg1kzEHfrW_PvdjyVN:APA91bF40oR3LsbH3ZqpPgk-YtHLRy8sCx4u6HVEk7PyoPjB-B1k9yDcKkqhoxTp4RC5pgQDSfsBaz2xQWHiLf-4jj44emstKSWYB-4Arv5hDGw5cLL1CF97vFfppL1yBaVJ3In3LBLo","order send to you","open app to see more details");
     Notification.find({user:req.user.id},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
         if(err){
             return res.status(400).json({
@@ -155,6 +187,133 @@ router.get('/vendors',authapi,function(req, res, next) {
             'meg'    : 'successfully'
         });
     });
+});
+
+router.post('/request-order-vendor', authapi,function(req, res, next) {
+    const id = req.body.id;
+    if(req.body.status == 'cancel'){
+        Order.updateOne({_id:id}, {$set : {status : "cancel"}},(error , result)=>{
+            if(error){
+                return res.status(400).json({
+                    'status' : false ,
+                    'data'   : error ,
+                    'meg'    : 'error'
+                });
+            }
+            senmessge(result.user.token,"vendor Cancel Your Order","open app to see more details");
+            var notification = new Notification({
+                title: "vendor Cancel Your Order",
+                body: "open app to see more details",
+                user: result.user._id,
+            });
+            notification.save();
+            return res.status(200).json({
+                'status' : true ,
+                'meg'    : 'successfully Cancel order'
+            });
+        }).populate('user');
+    }else if(req.body.status == 'accept'){
+        Order.updateOne({_id:id}, {$set : {status : "pendingdelevery"}},(error , result)=>{
+            if(error){
+                return res.status(400).json({
+                    'status' : false ,
+                    'data'   : error ,
+                    'meg'    : 'error'
+                });
+            }
+            senmessge(result.user.token,"vendor Accept Your Order","open app to see more details");
+            var notification = new Notification({
+                title: "vendor Accept Your Order",
+                body: "open app to see more details",
+                user: result.user._id,
+            });
+            notification.save();
+            User.find({type : "delevery"},"token",(err , result)=>{
+                if(err){
+                    console.log(err);
+                }
+                console.log(result);
+                result.forEach(function(resu,index,arr){
+                    senmessge(resu.token,"You have new Order","open app to see more details");
+                    var notification = new Notification({
+                        title: "You have new Order",
+                        body: "open app to see more details",
+                        user: resu._id,
+                    });
+                    notification.save();
+                });
+            });
+            return res.status(200).json({
+                'status' : true ,
+                'meg'    : 'successfully accept order'
+            });
+        }).populate('user');
+    }
+});
+
+router.post('/request-order-delevery', authapi,function(req, res, next) {
+    const id = req.body.id;
+    const iddelevery = req.user.id;
+    Order.updateOne({_id:id}, {$set : {status : "accept", delvery : iddelevery}},(error , result)=>{
+        if(error){
+            return res.status(400).json({
+                'status' : false ,
+                'data'   : error ,
+                'meg'    : 'error'
+            });
+        }
+        senmessge(result.user.token,"delvery Accept Your Order","open app to see more details");
+        var notification = new Notification({
+            title: "delvery Accept Your Order",
+            body: "open app to see more details",
+            user: result.user._id,
+        });
+        notification.save();
+        return res.status(200).json({
+            'status' : true ,
+            'meg'    : 'successfully accept order'
+        });
+    }).populate('user');
+});
+
+
+router.post('/request-order-user', authapi,function(req, res, next) {
+    const id = req.body.id;
+    const iduser = req.user.id;
+    Order.updateOne({_id:id}, {$set : {status : "finished", user : iduser}},(error , result)=>{
+        if(error){
+            return res.status(400).json({
+                'status' : false ,
+                'data'   : error ,
+                'meg'    : 'error'
+            });
+        }
+        senmessge(result.user.token,"user finished Order","open app to see more details");
+        var notification = new Notification({
+            title: "delvery Accept Your Order",
+            body: "open app to see more details",
+            user: result.user._id,
+        });
+        notification.save();
+        senmessge(result.trader.token,"user finished Order","open app to see more details");
+        var notification = new Notification({
+            title: "delvery Accept Your Order",
+            body: "open app to see more details",
+            user: result.trader._id,
+        });
+        notification.save();
+        senmessge(result.delvery.token,"user finished Order","open app to see more details");
+        var notification = new Notification({
+            title: "delvery Accept Your Order",
+            body: "open app to see more details",
+            user: result.delvery._id,
+        });
+        notification.save();
+        return res.status(200).json({
+            'status' : true ,
+            'meg'    : 'successfully finished order'
+        });
+    }).populate('user').populate('trader').populate('delvery').exec();
 });
 
 module.exports = router;
