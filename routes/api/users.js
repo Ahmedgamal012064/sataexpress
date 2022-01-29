@@ -21,7 +21,6 @@ router.post('/create-order', authapi,function(req, res, next) {
         userphone : req.body.userphone,
         useremail : req.body.useremail,
         usernotes : req.body.usernotes,
-        address   : req.body.address ,
         lat : req.body.lat,
         lang: req.body.lang,
     });

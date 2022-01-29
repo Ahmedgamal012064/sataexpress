@@ -80,6 +80,7 @@ router.post('/login', function(req, res, next) {
                     'meg'    : 'Password Wrong'
                 });
             }
+	    User.updateOne({_id:result.id}, {$set : {token : req.body.token, }});
             let token = jwt.sign({id:result._id},JWT_SECRET ,{expiresIn : '1h'});
             return res.status(200).json({
                 'status' : true ,
