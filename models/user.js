@@ -13,7 +13,6 @@ const userSchema = mongoose.Schema({
     gender: {type: String},
     token: {type: String},
     images: {type: String},
-    address: {type: String},
     lat: {type: String},
     lang: {type: String},
 },{ timestamps: true });

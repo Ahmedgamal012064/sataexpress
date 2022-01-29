@@ -9,7 +9,7 @@ const jwt   = require('jsonwebtoken');
 const JWT_SECRET = "sata express";
 
 router.get('/counteries', function(req, res, next) {
-    Countery.find({},'name photo',(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
+    Countery.find({},'name photo code',(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
         if(err){
             return res.status(400).json({
                 'status' : false ,

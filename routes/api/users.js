@@ -141,7 +141,7 @@ router.get('/notifications',authapi,function(req, res, next) {
 
 
 router.get('/vendors',authapi,function(req, res, next) {
-    User.find({_id:{$ne : req.user.id}},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
+    User.find({_id:{$ne : req.user.id} , type : "vendor"},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
         if(err){
             return res.status(400).json({
                 'status' : false ,

@@ -14,7 +14,8 @@ allcounteries = function(req, res, next) {
 
 Insercountery = function(req, res, next) {
     const countery = new Countery({
-        name : req.body.name ,
+        name : req.body.name , 
+        code : req.body.code , 
         lat:  req.body.lat ,
         lang:  req.body.lang
     });
@@ -37,6 +38,7 @@ updatecountery = function(req, res, next) {
     const id = req.body.id;
     const updatecountery = {
         name : req.body.name,
+         code : req.body.code , 
         lat:  req.body.lat ,
         lang:  req.body.lang
     }
