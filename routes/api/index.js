@@ -4,12 +4,49 @@ const { check, validationResult } = require('express-validator');
 const Countery = require('../../models/countery');
 const User     = require('../../models/user');
 const Cat      = require('../../models/cat');
+const Coupon      = require('../../models/coupon');
 const upload   = require('../../middleware/upload');
 const jwt   = require('jsonwebtoken');
 const JWT_SECRET = "sata express";
 
 router.get('/counteries', function(req, res, next) {
     Countery.find({},'name photo code',(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
+        if(err){
+            return res.status(400).json({
+                'status' : false ,
+                'data'   : err ,
+                'meg'    : 'error'
+            });
+        }
+        console.log(result);
+        return res.status(200).json({
+            'status' : true ,
+            'data'   : result ,
+            'meg'    : 'successfully'
+        });
+    });
+});
+
+router.get('/coupons', function(req, res, next) {
+    Coupon.find({},(err , result)=>{
+        if(err){
+            return res.status(400).json({
+                'status' : false ,
+                'data'   : err ,
+                'meg'    : 'error'
+            });
+        }
+        console.log(result);
+        return res.status(200).json({
+            'status' : true ,
+            'data'   : result ,
+            'meg'    : 'successfully'
+        });
+    });
+});
+
+router.get('/coupons/:code', function(req, res, next) {
+    Coupon.findOne({code : req.params.code},(err , result)=>{
         if(err){
             return res.status(400).json({
                 'status' : false ,
