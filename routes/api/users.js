@@ -29,7 +29,7 @@ router.post('/create-order', authapi,function(req, res, next) {
     then(result=>{
         User.findOne({_id:req.body.vendorid},'token',(err , result)=>{
             if(err){
-                res.status(400).json({
+                return res.status(400).json({
                     'status' : false ,
                     'data'   : err ,
                     'meg'    : 'error'
@@ -45,13 +45,13 @@ router.post('/create-order', authapi,function(req, res, next) {
                 notification.save();
             }
         });
-        res.status(200).json({
+        return res.status(200).json({
             'status' : true ,
             'meg'    : 'order created Successfully'
         });
     }).
     catch(err=>{
-        res.status(400).json({
+        return res.status(400).json({
             'status' : false ,
             'data'   : err ,
             'meg'    : 'error'
@@ -62,14 +62,14 @@ router.post('/create-order', authapi,function(req, res, next) {
 router.get('/orders-user',authapi,function(req, res, next) {
     Order.find({user:req.user.id},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
         if(err){
-            res.status(400).json({
+            return res.status(400).json({
                 'status' : false ,
                 'data'   : err ,
                 'meg'    : 'error'
             });
         }
         console.log(result);
-        res.status(200).json({
+        return res.status(200).json({
             'status' : true ,
             'data'   : result ,
             'meg'    : 'successfully'
@@ -80,14 +80,14 @@ router.get('/orders-user',authapi,function(req, res, next) {
 router.get('/orders-vendor',authapi,function(req, res, next) {
     Order.find({trader:req.user.id},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
         if(err){
-            res.status(400).json({
+            return res.status(400).json({
                 'status' : false ,
                 'data'   : err ,
                 'meg'    : 'error'
             });
         }
         console.log(result);
-        res.status(200).json({
+        return res.status(200).json({
             'status' : true ,
             'data'   : result ,
             'meg'    : 'successfully'
@@ -98,14 +98,14 @@ router.get('/orders-vendor',authapi,function(req, res, next) {
 router.get('/orders-delevery',authapi,function(req, res, next) {
     Order.find({delvery:req.user.id},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
         if(err){
-            res.status(400).json({
+            return res.status(400).json({
                 'status' : false ,
                 'data'   : err ,
                 'meg'    : 'error'
             });
         }
         console.log(result);
-        res.status(200).json({
+        return res.status(200).json({
             'status' : true ,
             'data'   : result ,
             'meg'    : 'successfully'
@@ -122,7 +122,7 @@ router.get('/notifications',authapi,function(req, res, next) {
     // return notification.save();
     Notification.find({user:req.user.id},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
         if(err){
-            res.status(400).json({
+            return res.status(400).json({
                 'status' : false ,
                 'data'   : err ,
                 'meg'    : 'error'
@@ -131,7 +131,7 @@ router.get('/notifications',authapi,function(req, res, next) {
         console.log(result);
     
 
-        res.status(200).json({
+        return res.status(200).json({
             'status' : true ,
             'data'   : result ,
             'meg'    : 'successfully'
@@ -141,16 +141,16 @@ router.get('/notifications',authapi,function(req, res, next) {
 
 
 router.get('/vendors',authapi,function(req, res, next) {
-    User.find({_id:req.user.id},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
+    User.find({_id:{$ne : req.user.id}},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
         if(err){
-            res.status(400).json({
+            return res.status(400).json({
                 'status' : false ,
                 'data'   : err ,
                 'meg'    : 'error'
             });
         }
         console.log(result);
-        res.status(200).json({
+        return res.status(200).json({
             'status' : true ,
             'data'   : result ,
             'meg'    : 'successfully'
