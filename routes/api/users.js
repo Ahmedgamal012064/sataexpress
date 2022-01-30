@@ -241,7 +241,7 @@ router.post('/request-order-vendor', authapi,function(req, res, next) {
                 if(err){
                     console.log(err);
                 }
-                  if(rest){
+                  if(result){
                 result.forEach(function(resu,index,arr){
                     senmessge(resu.token,"You have new Order","open app to see more details");
                     var notification = new Notification({
