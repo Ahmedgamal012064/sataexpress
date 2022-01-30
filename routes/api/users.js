@@ -186,7 +186,7 @@ router.get('/notifications',authapi,function(req, res, next) {
             'meg'    : 'successfully'
         });
     });
-}).populate('user');
+});
 
 
 router.get('/vendors',authapi,function(req, res, next) {
