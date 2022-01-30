@@ -128,7 +128,7 @@ router.get('/orders-delevery',authapi,function(req, res, next) {
             'data'   : result ,
             'meg'    : 'successfully'
         });
-    }).populate('user');
+    }).populate('user').populate('trader');
 });
 
 router.get('/orders-delevery-pending',authapi,function(req, res, next) {
@@ -146,7 +146,7 @@ router.get('/orders-delevery-pending',authapi,function(req, res, next) {
             'data'   : result ,
             'meg'    : 'successfully'
         });
-    }).populate('user');
+    }).populate('user').populate('trader');
 });
 
 router.get('/notifications',authapi,function(req, res, next) {
