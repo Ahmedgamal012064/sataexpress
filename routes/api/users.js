@@ -96,7 +96,7 @@ router.get('/orders-vendor',authapi,function(req, res, next) {
 });
 
 router.get('/orders-vendor-pending',authapi,function(req, res, next) {
-    Order.find({status:"pendingvendor"},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
+    Order.find({trader:req.user.id,status:"pendingvendor"},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
         if(err){
             return res.status(400).json({
                 'status' : false ,
