@@ -192,7 +192,7 @@ router.get('/vendors',authapi,function(req, res, next) {
 router.post('/request-order-vendor', authapi,function(req, res, next) {
     const id = req.body.id;
     if(req.body.status == 'cancel'){
-        Order.updateOne({_id:id}, {$set : {status : "cancel"}},(error , result)=>{
+        Order.updateOne({_id:id}, {$set : {status : "cancel" , trader : req.user.id}},(error , result)=>{
             if(error){
                 return res.status(400).json({
                     'status' : false ,
@@ -217,7 +217,7 @@ router.post('/request-order-vendor', authapi,function(req, res, next) {
             });
         });
     }else if(req.body.status == 'accept'){
-        Order.updateOne({_id:id}, {$set : {status : "pendingdelevery"}},(error , result)=>{
+        Order.updateOne({_id:id}, {$set : {status : "pendingdelevery",trader : req.user.id}},(error , result)=>{
             if(error){
                 return res.status(400).json({
                     'status' : false ,
