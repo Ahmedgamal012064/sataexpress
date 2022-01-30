@@ -280,7 +280,7 @@ router.post('/request-order-delevery', authapi,function(req, res, next) {
 router.post('/request-order-user', authapi,function(req, res, next) {
     const id = req.body.id;
     const iduser = req.user.id;
-    Order.updateOne({_id:id}, {$set : {status : "finished", user : iduser}},(error , result)=>{
+    Order.updateOne({_id:id}, {$set : {status : req.body.status, user : iduser}},(error , result)=>{
         if(error){
             return res.status(400).json({
                 'status' : false ,
@@ -288,23 +288,23 @@ router.post('/request-order-user', authapi,function(req, res, next) {
                 'meg'    : 'error'
             });
         }
-        senmessge(result.user.token,"user finished Order","open app to see more details");
+        senmessge(result.user.token,"user "+req.body.status+" Order","open app to see more details");
         var notification = new Notification({
-            title: "delvery Accept Your Order",
+            title: "user "+req.body.status+" Order",
             body: "open app to see more details",
             user: result.user._id,
         });
         notification.save();
-        senmessge(result.trader.token,"user finished Order","open app to see more details");
+        senmessge(result.trader.token,"user "+req.body.status+" Order","open app to see more details");
         var notification = new Notification({
-            title: "delvery Accept Your Order",
+            title: "user "+req.body.status+" Order",
             body: "open app to see more details",
             user: result.trader._id,
         });
         notification.save();
-        senmessge(result.delvery.token,"user finished Order","open app to see more details");
+        senmessge(result.delvery.token,"user "+req.body.status+" Order","open app to see more details");
         var notification = new Notification({
-            title: "delvery Accept Your Order",
+            title: "user "+req.body.status+" Order",
             body: "open app to see more details",
             user: result.delvery._id,
         });
