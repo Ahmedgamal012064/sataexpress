@@ -131,8 +131,8 @@ router.get('/orders-vendor-pending',authapi,function(req, res, next) {
     }).populate('user');
 });
 
-router.get('/orders-delevery',authapi,function(req, res, next) {
-    Order.find({delvery:req.user.id},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
+router.get('/orders-delevery/:status',authapi,function(req, res, next) {
+    Order.find({delvery:req.user.id , status : req.params.status},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
         if(err){
             return res.status(400).json({
                 'status' : false ,
