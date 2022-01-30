@@ -78,7 +78,7 @@ router.get('/orders-user/:status',authapi,function(req, res, next) {
 });
 
 router.get('/orders-vendor',authapi,function(req, res, next) {
-    Order.find({trader:req.user.id},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
+    Order.find({trader:req.user.id,status : "pendingdelevery"},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
         if(err){
             return res.status(400).json({
                 'status' : false ,
@@ -93,6 +93,24 @@ router.get('/orders-vendor',authapi,function(req, res, next) {
             'meg'    : 'successfully'
         });
     }).populate('user');
+});
+
+router.get('/orders-vendor-accept',authapi,function(req, res, next) {
+    Order.find({trader:req.user.id,status : "accept"},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
+        if(err){
+            return res.status(400).json({
+                'status' : false ,
+                'data'   : err ,
+                'meg'    : 'error'
+            });
+        }
+        console.log(result);
+        return res.status(200).json({
+            'status' : true ,
+            'data'   : result ,
+            'meg'    : 'successfully'
+        });
+    }).populate('delevery');
 });
 
 router.get('/orders-vendor-pending',authapi,function(req, res, next) {
