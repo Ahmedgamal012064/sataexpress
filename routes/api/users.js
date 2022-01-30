@@ -200,18 +200,22 @@ router.post('/request-order-vendor', authapi,function(req, res, next) {
                     'meg'    : 'error'
                 });
             }
-            senmessge(result.user.token,"vendor Cancel Your Order","open app to see more details");
-            var notification = new Notification({
-                title: "vendor Cancel Your Order",
-                body: "open app to see more details",
-                user: result.user._id,
+            User.findOne({_id : result.user},"token",(err , rest)=>{
+              if(rest){
+		    senmessge(rest.token,"vendor Cancel Your Order","open app to see more details");
+		    var notification = new Notification({
+		        title: "vendor Cancel Your Order",
+		        body: "open app to see more details",
+		        user: result.user,
+		    });
+		    notification.save();
+		    }
             });
-            notification.save();
             return res.status(200).json({
                 'status' : true ,
-                'meg'    : 'successfully Cancel order'
+                'meg'    : 'successfully Cancel order' 
             });
-        }).populate('user');
+        });
     }else if(req.body.status == 'accept'){
         Order.updateOne({_id:id}, {$set : {status : "pendingdelevery"}},(error , result)=>{
             if(error){
@@ -221,18 +225,23 @@ router.post('/request-order-vendor', authapi,function(req, res, next) {
                     'meg'    : 'error'
                 });
             }
-            senmessge(result.user.token,"vendor Accept Your Order","open app to see more details");
-            var notification = new Notification({
-                title: "vendor Accept Your Order",
-                body: "open app to see more details",
-                user: result.user._id,
+            User.findOne({_id : result.user},"token",(err , rest)=>{
+      
+            if(rest){
+		    senmessge(rest.token,"vendor Accept Your Order","open app to see more details");
+		    var notification = new Notification({
+		        title: "vendor Accept Your Order",
+		        body: "open app to see more details",
+		        user: result.user,
+		    });
+		    notification.save();
+		    }
             });
-            notification.save();
             User.find({type : "delevery"},"token",(err , result)=>{
                 if(err){
                     console.log(err);
                 }
-                console.log(result);
+                  if(rest){
                 result.forEach(function(resu,index,arr){
                     senmessge(resu.token,"You have new Order","open app to see more details");
                     var notification = new Notification({
@@ -242,12 +251,13 @@ router.post('/request-order-vendor', authapi,function(req, res, next) {
                     });
                     notification.save();
                 });
+                }
             });
             return res.status(200).json({
                 'status' : true ,
                 'meg'    : 'successfully accept order'
             });
-        }).populate('user');
+        });
     }
 });
 
@@ -262,18 +272,22 @@ router.post('/request-order-delevery', authapi,function(req, res, next) {
                 'meg'    : 'error'
             });
         }
-        senmessge(result.user.token,"delvery Accept Your Order","open app to see more details");
-        var notification = new Notification({
-            title: "delvery Accept Your Order",
-            body: "open app to see more details",
-            user: result.user._id,
+         User.findOne({_id : result.user},"token",(err , rest)=>{
+           if(rest){
+		senmessge(rest.token,"delvery Accept Your Order","open app to see more details");
+		var notification = new Notification({
+		    title: "delvery Accept Your Order",
+		    body: "open app to see more details",
+		    user: result.user,
+		});
+		notification.save();
+		}
         });
-        notification.save();
         return res.status(200).json({
             'status' : true ,
             'meg'    : 'successfully accept order'
         });
-    }).populate('user');
+    });
 });
 
 
@@ -288,32 +302,44 @@ router.post('/request-order-user', authapi,function(req, res, next) {
                 'meg'    : 'error'
             });
         }
-        senmessge(result.user.token,"user "+req.body.status+" Order","open app to see more details");
-        var notification = new Notification({
-            title: "user "+req.body.status+" Order",
-            body: "open app to see more details",
-            user: result.user._id,
+         User.findOne({_id : result.user},"token",(err , rest)=>{
+           if(rest){
+		senmessge(rest.token,"user "+req.body.status+" Order","open app to see more details");
+		var notification = new Notification({
+		    title: "user "+req.body.status+" Order",
+		    body: "open app to see more details",
+		    user: result.user,
+		});
+		notification.save();
+		}
         });
-        notification.save();
-        senmessge(result.trader.token,"user "+req.body.status+" Order","open app to see more details");
-        var notification = new Notification({
-            title: "user "+req.body.status+" Order",
-            body: "open app to see more details",
-            user: result.trader._id,
+         User.findOne({_id : result.trader},"token",(err , rest)=>{
+           if(rest){
+		senmessge(rest.token,"user "+req.body.status+" Order","open app to see more details");
+		var notification = new Notification({
+		    title: "user "+req.body.status+" Order",
+		    body: "open app to see more details",
+		    user: result.trader,
+		});
+		notification.save();
+		}
         });
-        notification.save();
-        senmessge(result.delvery.token,"user "+req.body.status+" Order","open app to see more details");
-        var notification = new Notification({
-            title: "user "+req.body.status+" Order",
-            body: "open app to see more details",
-            user: result.delvery._id,
+	User.findOne({_id : result.delvery},"token",(err , rest)=>{
+	  if(rest){	
+		senmessge(rest.token,"user "+req.body.status+" Order","open app to see more details");
+		var notification = new Notification({
+		    title: "user "+req.body.status+" Order",
+		    body: "open app to see more details",
+		    user: result.delvery,
+		});
+		notification.save();
+		}
         });
-        notification.save();
         return res.status(200).json({
             'status' : true ,
             'meg'    : 'successfully finished order'
         });
-    }).populate('user').populate('trader').populate('delvery').exec();
+    });
 });
 
 module.exports = router;
