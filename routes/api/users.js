@@ -37,13 +37,13 @@ router.post('/create-order', authapi,function(req, res, next) {
             }
             if(result){
                 senmessge(result.token,"order send to you","open app to see more details");
+             }
                 var notification = new Notification({
                     title: "order send to you",
                     body: "open app to see more details",
                     user: req.body.vendorid,
                 });
                 notification.save();
-            }
         });
         return res.status(200).json({
             'status' : true ,
@@ -186,7 +186,7 @@ router.get('/notifications',authapi,function(req, res, next) {
             'meg'    : 'successfully'
         });
     });
-});
+}).populate('user');
 
 
 router.get('/vendors',authapi,function(req, res, next) {
@@ -221,13 +221,13 @@ router.post('/request-order-vendor', authapi,function(req, res, next) {
             User.findOne({_id : result.user},"token",(err , rest)=>{
               if(rest){
 		    senmessge(rest.token,"vendor Cancel Your Order","open app to see more details");
+		    }
 		    var notification = new Notification({
 		        title: "vendor Cancel Your Order",
 		        body: "open app to see more details",
 		        user: result.user,
 		    });
 		    notification.save();
-		    }
             });
             return res.status(200).json({
                 'status' : true ,
@@ -247,13 +247,13 @@ router.post('/request-order-vendor', authapi,function(req, res, next) {
       
             if(rest){
 		    senmessge(rest.token,"vendor Accept Your Order","open app to see more details");
+		    }
 		    var notification = new Notification({
 		        title: "vendor Accept Your Order",
 		        body: "open app to see more details",
 		        user: result.user,
 		    });
 		    notification.save();
-		    }
             });
             User.find({type : "delevery"},"token",(err , result)=>{
                 if(err){
@@ -293,13 +293,13 @@ router.post('/request-order-delevery', authapi,function(req, res, next) {
          User.findOne({_id : result.user},"token",(err , rest)=>{
            if(rest){
 		senmessge(rest.token,"delvery Accept Your Order","open app to see more details");
+		}
 		var notification = new Notification({
 		    title: "delvery Accept Your Order",
 		    body: "open app to see more details",
 		    user: result.user,
 		});
 		notification.save();
-		}
         });
         return res.status(200).json({
             'status' : true ,
@@ -323,35 +323,36 @@ router.post('/request-order-user', authapi,function(req, res, next) {
          User.findOne({_id : result.user},"token",(err , rest)=>{
            if(rest){
 		senmessge(rest.token,"user "+req.body.status+" Order","open app to see more details");
+		}
 		var notification = new Notification({
 		    title: "user "+req.body.status+" Order",
 		    body: "open app to see more details",
 		    user: result.user,
 		});
 		notification.save();
-		}
         });
          User.findOne({_id : result.trader},"token",(err , rest)=>{
            if(rest){
 		senmessge(rest.token,"user "+req.body.status+" Order","open app to see more details");
+		}
 		var notification = new Notification({
 		    title: "user "+req.body.status+" Order",
 		    body: "open app to see more details",
 		    user: result.trader,
 		});
 		notification.save();
-		}
         });
 	User.findOne({_id : result.delvery},"token",(err , rest)=>{
 	  if(rest){	
 		senmessge(rest.token,"user "+req.body.status+" Order","open app to see more details");
+		}
 		var notification = new Notification({
 		    title: "user "+req.body.status+" Order",
 		    body: "open app to see more details",
 		    user: result.delvery,
 		});
 		notification.save();
-		}
+		
         });
         return res.status(200).json({
             'status' : true ,
