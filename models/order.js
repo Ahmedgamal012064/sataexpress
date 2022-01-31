@@ -19,6 +19,9 @@ const orderSchema = mongoose.Schema({
     address: {type: String},
     lat: {type: String, required: true},
     lang: {type: String, required: true},
+     address2 :  {type: String, required: true},
+     lat2 : {type: String, required: true},
+     lang2: {type: String, required: true} ,
     
 },{ timestamps: true });
 
