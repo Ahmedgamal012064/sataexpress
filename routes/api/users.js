@@ -9,54 +9,103 @@ const authapi   = require('../../middleware/authapi');
 const senmessge  =  require("../../middleware/sendmessage");
 
 router.post('/create-order', authapi,function(req, res, next) {
-    const order = new Order({
-        name   : req.body.name,
-        user   : req.user.id,
-        trader : req.body.vendorid,
-        status : "pendingvendor" ,
-        weight : req.body.weight,
-        cat    : req.body.cat,
-        price  : parseInt(req.body.weight) * 10 ,
-        username  : req.body.username,
-        userphone : req.body.userphone,
-        useremail : req.body.useremail,
-        usernotes : req.body.usernotes,
-        address :  req.body.address,
-        lat : req.body.lat,
-        lang: req.body.lang,
-    });
-    order.save().
-    then(result=>{
-        User.findOne({_id:req.body.vendorid},'token',(err , result)=>{
-            if(err){
-                return res.status(400).json({
-                    'status' : false ,
-                    'data'   : err ,
-                    'meg'    : 'error'
+    if(!req.body.vendorid){
+        const order = new Order({
+            name   : req.body.name,
+            user   : req.user.id,
+            status : "pendingdelevery" ,
+            weight : req.body.weight,
+            cat    : req.body.cat,
+            price  : parseInt(req.body.weight) * 10 ,
+            username  : req.body.username,
+            userphone : req.body.userphone,
+            useremail : req.body.useremail,
+            usernotes : req.body.usernotes,
+            address :  req.body.address,
+            lat : req.body.lat,
+            lang: req.body.lang,
+        });
+        order.save().
+        then(result=>{
+            User.find({type : "delevery"},"token",(err , result)=>{
+                if(err){
+                    console.log(err);
+                }
+                if(result){
+                result.forEach(function(resu,index,arr){
+                    senmessge(resu.token,"You have new Order","open app to see more details");
+                    var notification = new Notification({
+                        title: "You have new Order",
+                        body: "open app to see more details",
+                        user: resu._id,
+                    });
+                    notification.save();
                 });
-            }
-            if(result){
-                senmessge(result.token,"order send to you","open app to see more details");
-             }
+                }
+            });
+            return res.status(200).json({
+                'status' : true ,
+                'meg'    : 'order created Successfully'
+            });
+        }).
+        catch(err=>{
+            return res.status(400).json({
+                'status' : false ,
+                'data'   : err ,
+                'meg'    : 'error'
+            });
+        });
+        
+    }else{
+        const order = new Order({
+            name   : req.body.name,
+            user   : req.user.id,
+            trader : req.body.vendorid,
+            status : "pendingvendor" ,
+            weight : req.body.weight,
+            cat    : req.body.cat,
+            price  : parseInt(req.body.weight) * 10 ,
+            username  : req.body.username,
+            userphone : req.body.userphone,
+            useremail : req.body.useremail,
+            usernotes : req.body.usernotes,
+            address :  req.body.address,
+            lat : req.body.lat,
+            lang: req.body.lang,
+        });
+        order.save().
+        then(result=>{
+            User.findOne({_id:req.body.vendorid},'token',(err , result)=>{
+                if(err){
+                    return res.status(400).json({
+                        'status' : false ,
+                        'data'   : err ,
+                        'meg'    : 'error'
+                    });
+                }
+                if(result){
+                    senmessge(result.token,"order send to you","open app to see more details");
+                }
                 var notification = new Notification({
                     title: "order send to you",
                     body: "open app to see more details",
                     user: req.body.vendorid,
                 });
                 notification.save();
+            });
+            return res.status(200).json({
+                'status' : true ,
+                'meg'    : 'order created Successfully'
+            });
+        }).
+        catch(err=>{
+            return res.status(400).json({
+                'status' : false ,
+                'data'   : err ,
+                'meg'    : 'error'
+            });
         });
-        return res.status(200).json({
-            'status' : true ,
-            'meg'    : 'order created Successfully'
-        });
-    }).
-    catch(err=>{
-        return res.status(400).json({
-            'status' : false ,
-            'data'   : err ,
-            'meg'    : 'error'
-        });
-    });
+    }
 });
 
 router.get('/orders-user/:status',authapi,function(req, res, next) {
@@ -219,8 +268,8 @@ router.post('/request-order-vendor', authapi,function(req, res, next) {
                 });
             }
             User.findOne({_id : result.user},"token",(err , rest)=>{
-              if(rest){
-		    senmessge(rest.token,"vendor Cancel Your Order","open app to see more details");
+            if(rest){
+		        senmessge(rest.token,"vendor Cancel Your Order","open app to see more details");
 		    }
 		    var notification = new Notification({
 		        title: "vendor Cancel Your Order",
@@ -244,7 +293,6 @@ router.post('/request-order-vendor', authapi,function(req, res, next) {
                 });
             }
             User.findOne({_id : result.user},"token",(err , rest)=>{
-      
             if(rest){
 		    senmessge(rest.token,"vendor Accept Your Order","open app to see more details");
 		    }
@@ -259,7 +307,7 @@ router.post('/request-order-vendor', authapi,function(req, res, next) {
                 if(err){
                     console.log(err);
                 }
-                  if(result){
+                if(result){
                 result.forEach(function(resu,index,arr){
                     senmessge(resu.token,"You have new Order","open app to see more details");
                     var notification = new Notification({
@@ -290,9 +338,9 @@ router.post('/request-order-delevery', authapi,function(req, res, next) {
                 'meg'    : 'error'
             });
         }
-         User.findOne({_id : result.user},"token",(err , rest)=>{
-           if(rest){
-		senmessge(rest.token,"delvery Accept Your Order","open app to see more details");
+        User.findOne({_id : result.user},"token",(err , rest)=>{
+        if(rest){
+		    senmessge(rest.token,"delvery Accept Your Order","open app to see more details");
 		}
 		var notification = new Notification({
 		    title: "delvery Accept Your Order",

@@ -3,6 +3,7 @@ const csrf = require('csurf');
 var router = express.Router();
 const { check, validationResult } = require('express-validator');
 const User = require('../models/user');
+const Order = require('../models/order');
 const usercontrller  = require('../controller/usercontroller');
 
 /* GET users listing. */
@@ -55,7 +56,28 @@ router.post('/update', isLoggedIn,usercontrller.updateuser);
 /*********start Delete user*** */
 router.get('/delete/:id',isLoggedIn, usercontrller.deleteuser); 
 /*********end Delete user*** */
-//router.get('/detail/:id', usercontrller.deleteuser); 
+router.get('/detail/:id', isLoggedIn,function(req, res, next) {
+  User.findOne({_id:req.params.id},(err , result)=>{
+    if(err){
+      console.log(err);
+      res.redirect('/');
+    }
+    console.log(result);
+    if(result.type == "user"){
+      Order.find({user:req.params.id},(err , orders)=>{
+        res.render('users/detail',{title : 'Details-User',orders : orders,user : result, layout: 'layout/admin' });
+      });
+    }else if(result.type == "vendor"){
+      Order.find({trader:req.params.id},(err , orders)=>{
+        res.render('users/detail',{title : 'Details-User',orders : orders,user : result, layout: 'layout/admin' });
+      });
+    }else if(result.type == "delevery"){
+      Order.find({delvery:req.params.id},(err , orders)=>{
+        res.render('users/detail',{title : 'Details-User',orders : orders,user : result, layout: 'layout/admin' });
+      });
+    }
+  });
+}); 
 
 function isLoggedIn(req, res, next) {
   if(!req.isAuthenticated()) {

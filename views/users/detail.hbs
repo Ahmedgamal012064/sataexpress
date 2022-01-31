@@ -1,0 +1,113 @@
+<div class="app-content content">
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-md-6 col-12 mb-2">
+                    <h3 class="content-header-title">التفاصيل </h3>
+                    <div class="row breadcrumbs-top">
+                        <div class="breadcrumb-wrapper col-12">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/admin">الرئيسية</a>
+                                </li>
+                                <li class="breadcrumb-item active"> التفاصيل
+                                </li> 
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <div class="content-detached content-right">
+            <div class="content-body">
+                <!-- DOM - jQuery events table -->
+             <section class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-head">
+                  <div class="card-header">
+                    <h4 class="card-title">الطلبات</h4>
+                    <a class="heading-elements-toggle"><i class="la la-ellipsis-h font-medium-3"></i></a>
+                  </div>
+                </div>
+                <div class="card-content">
+                  <div class="card-body">
+                    <!-- Task List table -->
+                    <div class="table-responsive">
+                      <table id="users-contacts" class="table table-white-space table-bordered row-grouping display no-wrap icheck table-middle">
+                        <thead>
+                          <tr>
+                            <th>id</th>
+                            <th>اسم الشحنة</th>
+                            <th>الحالة</th>
+                            <th>السعر</th>
+                            <th>الوزن</th>
+                            <th>اسم المستلم</th>
+                            <th>هاتف المستلم</th>
+                            <th>ملاحظات</th>
+                            <th>العنوان</th>
+                            <th>التاريخ</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {{#each orders as |order|}}             
+                          <tr>
+                            <td>
+                              {{order._id}}
+                            </td>
+                            <td>
+                               {{order.name}}
+                            </td>
+                            <td class="text-center">
+                            {{order.status}}
+                            </td>
+                            <td class="text-center">
+                            {{order.price}}
+                            </td>
+                            </td>
+                            <td class="text-center">
+                            {{order.weight}}
+                            </td>
+                             <td> {{order.username}}</td>
+                            <td dir="ltr"> {{order.userphone}}</td>
+                            <td>{{order.usernotes}}</td>
+                            <td>{{order.address}}</td>
+                            <td>{{order.createdAt}}</td>
+                          </tr>
+                        {{/each}}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+       </section>
+       </div>
+       </div>
+        <div class="sidebar-detached sidebar-left" ,=",">
+        <div class="sidebar">
+          <div class="bug-list-sidebar-content">
+            <!-- Predefined Views -->
+            <div class="card">
+              <div class="card-head">
+                <div class="media p-1">
+                  <div class="media-left pr-1">
+                    <span class="avatar avatar-sm avatar-online rounded-circle">
+                      <img src="/Adminlook/images/logo/logo.png" alt="avatar"><i></i></span>
+                  </div>
+                  <div class="media-body media-middle">
+                    <h5 class="media-heading">{{user.name}}</h5>
+                  </div>
+                </div>
+              </div>
+                <!-- contacts view -->
+                <div class="card-body">
+                <div class="list-group">
+                    <a href="#" class="list-group-item active">عدد الطلبات  ({{orders.length}})</a>
+                </div>
+                </div>
+            </div>
+            <!--/ Predefined Views -->
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
