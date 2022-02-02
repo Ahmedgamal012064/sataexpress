@@ -16,39 +16,60 @@
                 </div>
             </div>
             <div class="content-body">
-            <!-- Basic form layout section start -->
-            <div class="row">
-                {{#each countries}}
-                <div class="col-md-4 col-sm-6">
-                    <div class="card text-center" style="box-shadow: 5px 5px 5px grey;  border-radius: 10px;"
-                    onmousemove="$(this).css('box-shadow', '0 0 #666').css('transform', 'translateY(5px)')" onmouseleave="$(this).css('box-shadow', '5px 5px 5px grey').css('transform', 'translateY(-5px)')">
-                    <div class="card-content">
-                            <div class="card-body">
-                                <img src="/Adminlook/images/logo/logo.png" alt="element 02" width="160" height="140"
-                                class="mb-0">
-                                <h3 class="card-title">{{this.name}}</h3>
-                                <div class="row">
-                                <a href="/admin/countries/edit/{{this._id}}"
-                                        class="btn btn-outline-primary col-md-6 col-6">تعديل</a>
+            <section id="dom">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title"> الدول </h4>
+                                    <a class="heading-elements-toggle"><i
+                                            class="la la-ellipsis-v font-medium-3"></i></a>
+                                    <div class="heading-elements">
+                                        <ul class="list-inline mb-0">
+                                            <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                            <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                                            <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                            <li><a data-action="close"><i class="ft-x"></i></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
 
-                                <a href="/admin/countries/delete/{{this._id}}"
-                                    class="btn btn-outline-danger col-md-6 col-6">حذف</a>
+                                {{!-- error or success --}}
+
+                                <div class="card-content collapse show">
+                                    <div class="card-body card-dashboard">
+                                        <table
+                                            class="table display nowrap table-striped table-bordered scroll-horizontal">{{--scroll-horizontal--}}
+                                            <thead class="">
+                                            <tr>
+                                                <th>الاسم </th>
+                                                <th>الاكشن</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{#each countries}}
+                                                    <tr>
+                                                        <td>{{this.name}}</td>
+                                                        <td>
+                                                            <div class="btn-group" role="group"
+                                                                aria-label="Basic example">
+                                                                <a href="/admin/countries/delete/{{this._id}}"
+                                                                class="btn btn-outline-primary btn-min-width box-shadow-3 mr-1 mb-1">تعديل</a>
+
+                                                                <a href="/admin/countries/delete/{{this._id}}"
+                                                                class="btn btn-outline-danger btn-min-width box-shadow-3 mr-1 mb-1">حذف</a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                {{/each}}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                {{else}}
-                <div class="container">
-                    <div class="container">
-                        <div class="text-center">
-                            <img src="/Adminlook/images/logo/logo.png" class="rounded container" alt="..."  height="300" style="width:500px">
-                            <h3 class="text-center" style="font-size:35px">لاتوجد مدن للعرض</h3>
-                        </div>
-                    </div>
-                </div>
-            {{/each}}
-            </div>
+                </section>
             </div>
         </div>
     </div>

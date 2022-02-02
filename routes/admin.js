@@ -8,6 +8,12 @@ const admincontroller = require('../controller/admincontroller');
 router.get('/', isLoggedIn,function(req, res, next) {
     res.render('home', { title: 'Admin Home', layout: 'layout/admin' });
 });
+router.get('/notifications', isLoggedIn,function(req, res, next) {
+    res.render('notifications/index', { title: 'notifications', layout: 'layout/admin' });
+});
+router.get('/reports', isLoggedIn,function(req, res, next) {
+    res.render('reports/index', { title: 'reports', layout: 'layout/admin' });
+});
 router.get('/Profile', isLoggedIn,function(req, res, next) {
     res.render('auth/profile', { title: 'Admin Profile', layout: 'layout/admin' });
 });
