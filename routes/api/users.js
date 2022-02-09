@@ -371,30 +371,30 @@ router.post('/request-order-user', authapi,function(req, res, next) {
                 'meg'    : 'error'
             });
         }
-         User.findOne({_id : result.user},"token",(err , rest)=>{
-           if(rest){
-		senmessge(rest.token,"user "+req.body.status+" Order","open app to see more details");
+        User.findOne({_id : result.user},"token",(err , rest)=>{
+        if(rest){
+		    senmessge(rest.token,"user "+req.body.status+" Order","open app to see more details");
 		}
 		var notification = new Notification({
-		    title: "user "+req.body.status+" Order",
-		    body: "open app to see more details",
-		    user: result.user,
+            title: "user "+req.body.status+" Order",
+            body: "open app to see more details",
+            user: result.user,
 		});
 		notification.save();
         });
-         User.findOne({_id : result.trader},"token",(err , rest)=>{
-           if(rest){
-		senmessge(rest.token,"user "+req.body.status+" Order","open app to see more details");
+        User.findOne({_id : result.trader},"token",(err , rest)=>{
+        if(rest){
+		    senmessge(rest.token,"user "+req.body.status+" Order","open app to see more details");
 		}
 		var notification = new Notification({
-		    title: "user "+req.body.status+" Order",
-		    body: "open app to see more details",
-		    user: result.trader,
+            title: "user "+req.body.status+" Order",
+            body: "open app to see more details",
+            user: result.trader,
 		});
 		notification.save();
         });
 	User.findOne({_id : result.delvery},"token",(err , rest)=>{
-	  if(rest){	
+	if(rest){	
 		senmessge(rest.token,"user "+req.body.status+" Order","open app to see more details");
 		}
 		var notification = new Notification({
@@ -410,6 +410,110 @@ router.post('/request-order-user', authapi,function(req, res, next) {
             'meg'    : 'successfully finished order'
         });
     });
+});
+
+//////////////////////Update Profile/////////////////////////////////
+router.post('/update-profile', authapi,function(req, res, next) {
+    const id = req.user.id;
+    const updateuser = {
+        name      : req.body.name ,
+        phone     : req.body.phone,
+        gender    : req.body.gender,
+        birthday  : req.body.birthday,
+        address   : req.body.address ,
+        lat       : req.body.lat ,
+        lang      : req.body.lang ,
+    }
+    User.updateOne({_id:id}, {$set : updateuser},(error , result)=>{
+        if(error){
+            console.log(error );
+            return res.status(400).json({
+                'status' : false ,
+                'data'   : error ,
+                'meg'    : 'error'
+            });
+        }
+        console.log(result);
+        return res.status(200).json({
+            'status' : true ,
+            'meg'    : 'successfully Update Profile'
+        });
+    });
+});
+
+router.post('/update-email', authapi,function(req, res, next) {
+    const id = req.user.id;
+    const updateuser = {
+        email     : req.body.email,
+    }
+    User.updateOne({_id:id}, {$set : updateuser},(error , result)=>{
+        if(error){
+            console.log(error );
+            return res.status(400).json({
+                'status' : false ,
+                'data'   : error ,
+                'meg'    : 'error'
+            });
+        }
+        console.log(result);
+        return res.status(200).json({
+            'status' : true ,
+            'meg'    : 'successfully Update Email'
+        });
+    });
+});
+
+router.post('/update-password', authapi,function(req, res, next) {
+    const id = req.user.id;
+    if(new User().validPassword(req.body.oldpass)){
+        const updateuser = {
+            password : new User().encryptPassword(req.body.newpass),
+        }
+        User.updateOne({_id:id}, {$set : updateuser},(error , result)=>{
+            if(error){
+                console.log(error );
+                return res.status(400).json({
+                    'status' : false ,
+                    'data'   : error ,
+                    'meg'    : 'error'
+                });
+            }
+            console.log(result);
+            return res.status(200).json({
+                'status' : true ,
+                'meg'    : 'successfully Update Password'
+            });
+        });
+    }else{
+        return res.status(200).json({
+            'status' : false ,
+            'meg'    : 'Old Password wrong'
+        });
+    }
+});
+
+
+router.post('/order-rate', authapi,function(req, res, next) {
+    const idorder = req.body.idorder;
+        const updateuser = {
+            rate  : req.body.rate,
+            notes : req.body.notes,
+        }
+        Order.updateOne({_id:idorder}, {$set : updateuser},(error , result)=>{
+            if(error){
+                console.log(error );
+                return res.status(400).json({
+                    'status' : false ,
+                    'data'   : error ,
+                    'meg'    : 'error'
+                });
+            }
+            console.log(result);
+            return res.status(200).json({
+                'status' : true ,
+                'meg'    : 'successfully rate order'
+            });
+        });
 });
 
 module.exports = router;
