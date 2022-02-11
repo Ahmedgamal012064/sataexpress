@@ -238,7 +238,7 @@ router.post('/signup-complete', upload.array('images[]',3),function(req, res, ne
 
 
 router.post('/request-price',function(req, res, next) {
-    const meter  = req.user.meter;
+    const meter  = req.body.meter;
     //const weight = req.user.weight;
     Admin.findOne({email : "admin@gmail.com"},(err , result)=>{
         if(err){
