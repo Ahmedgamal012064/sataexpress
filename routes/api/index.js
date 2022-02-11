@@ -5,6 +5,8 @@ const Countery = require('../../models/countery');
 const User     = require('../../models/user');
 const Cat      = require('../../models/cat');
 const Coupon      = require('../../models/coupon');
+const Admin      = require('../../models/admin'); 
+const Order      = require('../../models/order');
 const upload   = require('../../middleware/upload');
 const jwt   = require('jsonwebtoken');
 const JWT_SECRET = "sata express";
@@ -230,6 +232,47 @@ router.post('/signup-complete', upload.array('images[]',3),function(req, res, ne
                 'data'   : err ,
                 'meg'    : 'error'
             });
+        });
+    });
+});
+
+
+router.post('/request-price',function(req, res, next) {
+    const meter  = req.user.meter;
+    //const weight = req.user.weight;
+    Admin.findOne({email : "admin@gmail.com"},(err , result)=>{
+        if(err){
+            return res.status(400).json({
+                'status' : false ,
+                'data'   : err ,
+                'meg'    : 'error'
+            });
+        }
+        console.log(result);
+        var price = (meter / 1000) * result.deleverypercent;
+        return res.status(200).json({
+            'status' : true ,
+            'data'   : price ,
+            'meg'    : 'done'
+        });
+    });
+});
+
+router.post('/trace-order',function(req, res, next) {
+    const order  = req.user.order;
+    Order.find( { $or : [ { id: order }, { userphone: order } ] },(err , result)=>{
+        if(err){
+            return res.status(400).json({
+                'status' : false ,
+                'data'   : err ,
+                'meg'    : 'error'
+            });
+        }
+        console.log(result);
+        return res.status(200).json({
+            'status' : true ,
+            'data'   : result ,
+            'meg'    : 'done'
         });
     });
 });

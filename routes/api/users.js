@@ -363,7 +363,12 @@ router.post('/request-order-delevery', authapi,function(req, res, next) {
 router.post('/request-order-user', authapi,function(req, res, next) {
     const id = req.body.id;
     const iduser = req.user.id;
-    Order.updateOne({_id:id}, {$set : {status : req.body.status, user : iduser}},(error , result)=>{
+    var updateorder = {
+        status : req.body.status ,
+        rate   : req.body.rate ,
+        notes  : req.body.notes
+    };
+    Order.updateOne({_id:id}, {$set : updateorder},(error , result)=>{
         if(error){
             return res.status(400).json({
                 'status' : false ,
@@ -490,30 +495,6 @@ router.post('/update-password', authapi,function(req, res, next) {
             'meg'    : 'Old Password wrong'
         });
     }
-});
-
-
-router.post('/order-rate', authapi,function(req, res, next) {
-    const idorder = req.body.idorder;
-        const updateuser = {
-            rate  : req.body.rate,
-            notes : req.body.notes,
-        }
-        Order.updateOne({_id:idorder}, {$set : updateuser},(error , result)=>{
-            if(error){
-                console.log(error );
-                return res.status(400).json({
-                    'status' : false ,
-                    'data'   : error ,
-                    'meg'    : 'error'
-                });
-            }
-            console.log(result);
-            return res.status(200).json({
-                'status' : true ,
-                'meg'    : 'successfully rate order'
-            });
-        });
 });
 
 module.exports = router;

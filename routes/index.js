@@ -9,6 +9,10 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express'  , layout: 'layout/layout' , success : req.session.success , error : req.session.error});
 });
 
+router.get('/request-job', function(req, res, next) {
+  res.render('job', { title: 'Request-Job'  , layout: 'layout/layout' , success : req.session.success , error : req.session.error});
+});
+
 //start login route
 router.get('/Login',notLoggedIn,function(req, res, next) {
   var errors = req.flash('login-error');

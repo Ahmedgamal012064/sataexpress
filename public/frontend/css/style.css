@@ -471,6 +471,7 @@ h3 {
 .banner-slider .owl-item.active h1 {
   -webkit-animation: slideInDown 2s cubic-bezier(0, 0, 0, 1.02);
           animation: slideInDown 2s cubic-bezier(0, 0, 0, 1.02);
+  font-family: 'Cairo', sans-serif;
 }
 
 .banner-slider .owl-item.active p {

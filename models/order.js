@@ -23,8 +23,8 @@ const orderSchema = mongoose.Schema({
     lat2 : {type: String, required: true},
     lang2: {type: String, required: true} ,
 
-    rate : {type: String, required: true} ,
-    notes : {type: String, required: true} ,
+    rate : {type: String} ,
+    notes : {type: String} ,
     
 },{ timestamps: true });
 
