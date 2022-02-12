@@ -238,7 +238,14 @@ router.post('/signup-complete', upload.array('images[]',3),function(req, res, ne
 
 
 router.post('/request-price',function(req, res, next) {
-    const meter  = req.body.meter;
+    const meter    = req.body.meter;
+    const coupon   = req.body.coupon;
+    var subtract = 0 ;
+    Coupon.findOne({code  :coupon},(err , result)=>{
+        if(result){
+            subtract = result.price;
+        }
+    });
     //const weight = req.user.weight;
     Admin.findOne({email : "admin@gmail.com"},(err , result)=>{
         if(err){
@@ -252,7 +259,7 @@ router.post('/request-price',function(req, res, next) {
         var price = (meter / 1000) * result.deleverypercent;
         return res.status(200).json({
             'status' : true ,
-            'data'   : price ,
+            'data'   : price - subtract ,
             'meg'    : 'done'
         });
     });

@@ -3,6 +3,7 @@ var router = express.Router();
 const { check, validationResult } = require('express-validator');
 const User = require('../../models/user');
 const Order = require('../../models/order');
+const Address = require('../../models/address');
 var Notification = require("../../models/notification");
 const jwt   = require('jsonwebtoken');
 const authapi   = require('../../middleware/authapi');
@@ -16,7 +17,7 @@ router.post('/create-order', authapi,function(req, res, next) {
             status : "pendingdelevery" ,
             weight : req.body.weight,
             cat    : req.body.cat,
-            price  : parseInt(req.body.weight) * 10 ,
+            price  : req.body.price ,
             username  : req.body.username,
             userphone : req.body.userphone,
             useremail : req.body.useremail,
@@ -470,7 +471,7 @@ router.post('/update-email', authapi,function(req, res, next) {
 
 router.post('/update-password', authapi,function(req, res, next) {
     const id = req.user.id;
-    if(new User().validPassword(req.body.oldpass)){
+    //if(new User().validPassword(req.body.oldpass)){
         const updateuser = {
             password : new User().encryptPassword(req.body.newpass),
         }
@@ -489,12 +490,59 @@ router.post('/update-password', authapi,function(req, res, next) {
                 'meg'    : 'successfully Update Password'
             });
         });
-    }else{
-        return res.status(200).json({
-            'status' : false ,
-            'meg'    : 'Old Password wrong'
+    // }else{
+    //     return res.status(200).json({
+    //         'status' : false ,
+    //         'meg'    : 'Old Password wrong'
+    //     });
+    // }
+});
+
+
+router.post('/Add-Addresses', authapi,function(req, res, next) {
+
+        const address = new Address({
+            name    : req.body.name    ,
+            email   : req.body.email   ,
+            phone   : req.body.phone   ,
+            address : req.body.address ,
+            lat     : req.body.lat     ,
+            lang    : req.body.lat     ,
+            user    : req.user.id 
         });
-    }
+        address.save().
+        then(result=>{
+            return res.status(200).json({
+                'status' : true ,
+                'meg'    : 'Successfully Add Address'
+            });
+        }).
+        catch(err=>{
+            return res.status(400).json({
+                'status' : false ,
+                'data'   : err ,
+                'meg'    : 'error'
+            });
+        });
+});
+
+router.get('/All-Addresses', authapi,function(req, res, next) {
+
+    Address.find({user:req.user.id},(err , result)=>{
+        if(err){
+            return res.status(400).json({
+                'status' : false ,
+                'data'   : err ,
+                'meg'    : 'error'
+            });
+        }
+        console.log(result);
+        return res.status(200).json({
+            'status' : true ,
+            'data'   : result ,
+            'meg'    : 'successfully'
+        });
+    });
 });
 
 module.exports = router;
