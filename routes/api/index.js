@@ -266,7 +266,7 @@ router.post('/request-price',function(req, res, next) {
 });
 
 router.post('/trace-order',function(req, res, next) {
-    const order  = req.user.order;
+    const order  = req.body.order;
     Order.find( { $or : [ { id: order }, { userphone: order } ] },(err , result)=>{
         if(err){
             return res.status(400).json({
