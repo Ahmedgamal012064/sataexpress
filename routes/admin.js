@@ -17,9 +17,10 @@ const senmessge  =  require("../middleware/sendmessage");
 const admincontroller = require('../controller/admincontroller');
 
 router.get('/', isLoggedIn,function(req, res, next) {
-    var users ;
+    var users = 0 ;
     User.find({ type: "user" }, (err , result)=>{
-        users = result.length;
+        users += result.length;
+        console.log("count is : " + result.length);
     });
     var vendors    = User.find( { type: "vendor" } ).count();
     var deleveries = User.find( { type: "delevery" } ).count();
@@ -29,13 +30,12 @@ router.get('/', isLoggedIn,function(req, res, next) {
     var goverments = Goverment.find().count();
     var cities     = City.find().count();
     var subcat     = Subcat.find().count();
-    var cat        = Cat .find().count();
+    var cat        = Cat.find().count();
     var counts     = {
-        "users" : users ,"vendors" : vendors ,"deleveries" : deleveries ,
-        "counteries" : counteries ,"coupons" : coupons ,"orders" : orders ,
-        "goverments" : goverments ,"cities" : cities ,"subcat" : subcat ,"cat" : cat
+        users , vendors , deleveries ,counteries , coupons , orders ,
+        goverments , cities , subcat , cat
     };
-    console.log(users);
+    console.log("users is : "+users);
     res.render('home', { title: 'Admin Home', counts :  counts ,layout: 'layout/admin' });
 });
 /////////////Start Notifications*/////////////////
