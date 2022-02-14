@@ -120,7 +120,7 @@ router.post('/login', function(req, res, next) {
                 });
             }
 	    User.updateOne({_id:result._id}, {$set : {token : req.body.token }});
-            let token = jwt.sign({id:result._id, type : user.type},JWT_SECRET ,{}); //expiresIn : '1d'
+            let token = jwt.sign({id:result._id, type : result.type},JWT_SECRET ,{}); //expiresIn : '1d'
             return res.status(200).json({
                 'status' : true ,
                 'data'   : result ,

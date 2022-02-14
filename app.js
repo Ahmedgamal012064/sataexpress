@@ -95,7 +95,5 @@ module.exports = app;
 
 
 /*
-send mail contact us
-send mail request jop
 finish admin page
 */

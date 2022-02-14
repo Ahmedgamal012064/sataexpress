@@ -2,13 +2,13 @@
         <div class="content-wrapper">
             <div class="content-header row">
                 <div class="content-header-left col-md-6 col-12 mb-2">
-                    <h3 class="content-header-title">الطلبات </h3>
+                    <h3 class="content-header-title">الطلبات الملغاة </h3>
                     <div class="row breadcrumbs-top">
                         <div class="breadcrumb-wrapper col-12">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="/admin">الرئيسية</a>
                                 </li>
-                                <li class="breadcrumb-item active"> الطلبات
+                                <li class="breadcrumb-item active"> الطلبات الملغاة
                                 </li> 
                             </ol>
                         </div>
@@ -22,7 +22,7 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h4 class="card-title">الطلبات </h4>
+                                    <h4 class="card-title">الطلبات الملغاة </h4>
                                     <a class="heading-elements-toggle"><i
                                             class="la la-ellipsis-v font-medium-3"></i></a>
                                     <div class="heading-elements">
@@ -49,7 +49,6 @@
                                                 <th>ايميل العميل</th>
                                                 <th>عنوان العميل</th>
                                                 <th>اسم المندوب</th>
-                                                <th>حالة الطلب</th>
                                                 <th>السعر</th>
                                                 {{!-- <th>الاكشن</th> --}}
                                             </tr>
@@ -67,7 +66,6 @@
                                                             {{else}}
                                                             لايوجد
                                                         {{/if}}</td>
-                                                        <td>{{this.status}}</td>
                                                         <td>{{this.price}}</td>
                                                         {{!-- <td>
                                                             <div class="btn-group" role="group"

@@ -51,13 +51,15 @@
                                             </tr>
                                             </thead>
                                             <tbody>
+                                                {{#each notifications}}
                                                     <tr>
-                                                        <td>209012</td>
-                                                        <td>عروض اليوم</td>
-                                                        <td>عرض 20 في المية خصم علي اي توصيل</td>
-                                                        <td>التجار</td>
-                                                        <td>30/1/2022</td>
+                                                        <td>{{this._id}}</td>
+                                                        <td>{{this.title}}</td>
+                                                        <td>{{this.body}}</td>
+                                                        <td>{{this.type}}</td>
+                                                        <td>{{this.createAt}}</td>
                                                     </tr>
+                                                {{/each}}
                                             </tbody>
                                         </table>
                                     </div>

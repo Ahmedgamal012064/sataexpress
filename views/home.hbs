@@ -35,15 +35,15 @@
                         <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form method="POST" action="">
+                    <form method="POST" action="/admin/post-notifications">
                     <div class="modal-body">
                           <div class="form-group">
                             <label for="exampleFormControlSelect1">اختر لمن تريد الارسال</label>
                             <select class="form-control" id="exampleFormControlSelect1" name="type" required>
                               {{!-- <option value="all"> الكل</option> --}}
-                              <option value="deleveries">مندوبين</option>
-                              <option value="vendors">تجار</option>
-                              <option value="users">عملاء</option>
+                              <option value="delevery">مندوبين</option>
+                              <option value="vendor">تجار</option>
+                              <option value="user">عملاء</option>
                             </select>
                           </div>
                           <div class="form-group">
@@ -52,7 +52,7 @@
                           </div>
                           <div class="form-group">
                               <label for="exampleInputPassword1">محتوي الرسالة</label>
-                              <textarea name="content" class="form-control" placeholder="محتوي الرسالة" col="50" row="20" required> </textarea>
+                              <textarea name="body" class="form-control" placeholder="محتوي الرسالة" col="50" row="20" required> </textarea>
                           </div>
                       </div>
                       <div class="modal-footer">
@@ -132,7 +132,7 @@
                         <div class="card-body">
                           <div class="media d-flex">
                             <div class="media-body text-left">
-                              <h3 class="warning">0</h3>
+                              <h3 class="warning">{{counts.users}}</h3>
                               <h6>الطلبات المعلقة</h6>
                             </div>
                             <div>
