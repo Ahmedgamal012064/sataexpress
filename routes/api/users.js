@@ -4,6 +4,7 @@ const { check, validationResult } = require('express-validator');
 const User = require('../../models/user');
 const Order = require('../../models/order');
 const Address = require('../../models/address');
+const Admin = require('../../models/admin');
 var Notification = require("../../models/notification");
 const jwt   = require('jsonwebtoken');
 const authapi   = require('../../middleware/authapi');
@@ -12,22 +13,22 @@ const senmessge  =  require("../../middleware/sendmessage");
 router.post('/create-order', authapi,function(req, res, next) {
     if(!req.body.vendorid){
         const order = new Order({
-            name   : req.body.name,
-            user   : req.user.id,
-            status : "pendingdelevery" ,
-            weight : req.body.weight,
-            cat    : req.body.cat,
-            price  : req.body.price ,
+            name      : req.body.name,
+            user      : req.user.id,
+            status    : "pendingdelevery" ,
+            weight    : req.body.weight,
+            cat       : req.body.cat,
+            price     : req.body.price ,
             username  : req.body.username,
             userphone : req.body.userphone,
             useremail : req.body.useremail,
             usernotes : req.body.usernotes,
-            address :  req.body.address,
-            lat : req.body.lat,
-            lang: req.body.lang,
-            address2 :  req.body.address2,
-            lat2 : req.body.lat2,
-            lang2: req.body.lang2
+            address   : req.body.address,
+            lat       : req.body.lat,
+            lang      : req.body.lang,
+            address2  : req.body.address2,
+            lat2      : req.body.lat2,
+            lang2     : req.body.lang2
         });
         order.save().
         then(result=>{
@@ -273,14 +274,14 @@ router.post('/request-order-vendor', authapi,function(req, res, next) {
             }
             User.findOne({_id : result.user},"token",(err , rest)=>{
             if(rest){
-		        senmessge(rest.token,"vendor Cancel Your Order","open app to see more details");
-		    }
-		    var notification = new Notification({
-		        title: "vendor Cancel Your Order",
-		        body: "open app to see more details",
-		        user: result.user,
-		    });
-		    notification.save();
+                senmessge(rest.token,"vendor Cancel Your Order","open app to see more details");
+            }
+            var notification = new Notification({
+                title: "vendor Cancel Your Order",
+                body: "open app to see more details",
+                user: result.user,
+            });
+            notification.save();
             });
             return res.status(200).json({
                 'status' : true ,
@@ -298,14 +299,14 @@ router.post('/request-order-vendor', authapi,function(req, res, next) {
             }
             User.findOne({_id : result.user},"token",(err , rest)=>{
             if(rest){
-		    senmessge(rest.token,"vendor Accept Your Order","open app to see more details");
-		    }
-		    var notification = new Notification({
-		        title: "vendor Accept Your Order",
-		        body: "open app to see more details",
-		        user: result.user,
-		    });
-		    notification.save();
+            senmessge(rest.token,"vendor Accept Your Order","open app to see more details");
+            }
+            var notification = new Notification({
+                title: "vendor Accept Your Order",
+                body: "open app to see more details",
+                user: result.user,
+            });
+            notification.save();
             });
             User.find({type : "delevery"},"token",(err , result)=>{
                 if(err){
@@ -344,12 +345,12 @@ router.post('/request-order-delevery', authapi,function(req, res, next) {
         }
         User.findOne({_id : result.user},"token",(err , rest)=>{
         if(rest){
-		    senmessge(rest.token,"delvery Accept Your Order","open app to see more details");
-		}
-		var notification = new Notification({
-		    title: "delvery Accept Your Order",
-		    body: "open app to see more details",
-		    user: result.user,
+            senmessge(rest.token,"delvery Accept Your Order","open app to see more details");
+        }
+        var notification = new Notification({
+            title: "delvery Accept Your Order",
+            body: "open app to see more details",
+            user: result.user,
 		});
 		notification.save();
         });
@@ -379,7 +380,7 @@ router.post('/request-order-user', authapi,function(req, res, next) {
         }
         User.findOne({_id : result.user},"token",(err , rest)=>{
         if(rest){
-		    senmessge(rest.token,"user "+req.body.status+" Order","open app to see more details");
+            senmessge(rest.token,"user "+req.body.status+" Order","open app to see more details");
 		}
 		var notification = new Notification({
             title: "user "+req.body.status+" Order",
@@ -390,7 +391,7 @@ router.post('/request-order-user', authapi,function(req, res, next) {
         });
         User.findOne({_id : result.trader},"token",(err , rest)=>{
         if(rest){
-		    senmessge(rest.token,"user "+req.body.status+" Order","open app to see more details");
+            senmessge(rest.token,"user "+req.body.status+" Order","open app to see more details");
 		}
 		var notification = new Notification({
             title: "user "+req.body.status+" Order",
@@ -404,9 +405,9 @@ router.post('/request-order-user', authapi,function(req, res, next) {
 		senmessge(rest.token,"user "+req.body.status+" Order","open app to see more details");
 		}
 		var notification = new Notification({
-		    title: "user "+req.body.status+" Order",
-		    body: "open app to see more details",
-		    user: result.delvery,
+            title: "user "+req.body.status+" Order",
+            body: "open app to see more details",
+            user: result.delvery,
 		});
 		notification.save();
 		
@@ -540,6 +541,40 @@ router.get('/All-Addresses', authapi,function(req, res, next) {
         return res.status(200).json({
             'status' : true ,
             'data'   : result ,
+            'meg'    : 'successfully'
+        });
+    });
+});
+
+
+router.get('/wallet',authapi,function(req, res, next) {
+
+    var price = 0;
+    Order.find({trader:req.user.id},(err , result)=>{
+        if(err){
+            return res.status(400).json({
+                'status' : false ,
+                'data'   : err ,
+                'meg'    : 'error'
+            });
+        }
+        result.forEach(element => {
+            console.log(element);
+            price += element.price; 
+        });
+    });
+    Admin.findOne({email : "admin@gmail.com"},"sitepercent",(err , result)=>{
+        if(err){
+            return res.status(400).json({
+                'status' : false ,
+                'data'   : err ,
+                'meg'    : 'error'
+            });
+        }
+        console.log(result);
+        return res.status(200).json({
+            'status' : true ,
+            'data'   :  price == 0 ? 0 : price - result.sitepercent ,
             'meg'    : 'successfully'
         });
     });

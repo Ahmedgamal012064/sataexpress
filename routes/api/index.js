@@ -120,7 +120,7 @@ router.post('/login', function(req, res, next) {
                 });
             }
 	    User.updateOne({_id:result._id}, {$set : {token : req.body.token }});
-            let token = jwt.sign({id:result._id},JWT_SECRET ,{}); //expiresIn : '1d'
+            let token = jwt.sign({id:result._id, type : user.type},JWT_SECRET ,{}); //expiresIn : '1d'
             return res.status(200).json({
                 'status' : true ,
                 'data'   : result ,
@@ -218,7 +218,7 @@ router.post('/signup-complete', upload.array('images[]',3),function(req, res, ne
         }
         user.save().
         then(result=>{
-            let token = jwt.sign({id  : user._id},JWT_SECRET ,{});//expiresIn : '1h'
+            let token = jwt.sign({id  : user._id , type : user.type},JWT_SECRET ,{});//expiresIn : '1h'
             return res.status(200).json({
                 'status' : true ,
                 'data'   : result ,
