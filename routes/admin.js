@@ -22,8 +22,8 @@ router.get('/', isLoggedIn,function(req, res, next) {
         users += result.length;
         console.log("count is : " + result.length);
     });
-    var vendors    = User.find( { type: "vendor" } ).count();
-    var deleveries = User.find( { type: "delevery" } ).count();
+    var vendors    = User.find({type: "vendor"}).count();
+    var deleveries = User.find({type: "delevery"}).count();
     var counteries = Countery.find().count();
     var coupons    = Coupon.find().count();
     var orders     = Order.find().count();

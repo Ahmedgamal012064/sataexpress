@@ -10,8 +10,24 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express'  , layout: 'layout/layout' , success : req.session.success , error : req.session.error});
 });
 
+router.get('/about-us', function(req, res, next) {
+  res.render('about', { title: 'About-Us'  , layout: 'layout/layout' , success : req.session.success , error : req.session.error});
+});
+
+router.get('/feature', function(req, res, next) {
+  res.render('feature', { title: 'Feature'  , layout: 'layout/layout' , success : req.session.success , error : req.session.error});
+});
+
+router.get('/testmonials', function(req, res, next) {
+  res.render('testmonials', { title: 'Testmonials'  , layout: 'layout/layout' , success : req.session.success , error : req.session.error});
+});
+
 router.get('/request-job', function(req, res, next) {
   res.render('job', { title: 'Request-Job'  , layout: 'layout/layout' , success : req.session.success , error : req.session.error});
+});
+
+router.get('/contact-us', function(req, res, next) {
+  res.render('contact', { title: 'Contact-Us'  , layout: 'layout/layout' , success : req.session.success , error : req.session.error});
 });
 
 //start login route
