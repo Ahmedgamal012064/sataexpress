@@ -8,7 +8,8 @@ allcities = function(req, res, next) {
             res.redirect('/admin/cities');
         }
         console.log(result);
-        res.render('cities/index', { title: 'cities',cities : result, layout: 'layout/admin' });
+        var success = req.flash('success-city');
+        res.render('cities/index', { title: 'cities',cities : result, layout: 'layout/admin' , success : success });
     });
 }; //all cities  
 
@@ -23,6 +24,7 @@ Insercities = function(req, res, next) {
             res.redirect('/admin/cities');
         }
         console.log(result);
+        req.flash('success-city',"done");
         res.redirect('/admin/cities');
     });
 }; //Insert cities
@@ -40,6 +42,7 @@ updatecities = function(req, res, next) {
             return ;
         }
         console.log(result);
+        req.flash('success-city',"done");
         res.redirect('/admin/cities');
     });
 }; //Update cities

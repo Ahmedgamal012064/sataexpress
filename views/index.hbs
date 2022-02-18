@@ -210,15 +210,12 @@
                             <div class="shipping-text">
                                 <h3>معرفة مكان الشحن</h3>
                                 <p>سيكون معرف المسار ومعرف الطلب في ملف المستند الخاص بك.</p>
-                                <form>
+                                <form id="my_form">
                                     <div class="form-group">
-                                        <input type="text"  class="form-control" placeholder="أدخل معرف المسار">
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="أدخل معرف الطلب">
+                                        <input type="text" class="form-control" id="idorder" placeholder="أدخل معرف الطلب">
                                     </div>
 
-                                    <button type="submit" class="shipping-btn">
+                                    <button type="submit" id="submit" class="shipping-btn">
                                         تتبع الآن
                                     </button>
                                 </form>
@@ -335,7 +332,6 @@
             </div>
         </section>
         <!-- Feedback Section End -->  
-
         <!-- Company Section Start -->
         <div class="company-section">
             <div class="container">
@@ -359,7 +355,7 @@
             </div>
         </div><br>
         <!-- Company Section End -->
-         <!-- Contact Section Start -->
+        <!-- Contact Section Start -->
         <section class="contact-section contact-style-two pb-100" id="contact">
             <div class="container">
                 <div class="section-title text-center">
@@ -370,7 +366,7 @@
                 <div class="row">
                     <div class="col-lg-10 offset-lg-1">
                         <div class="contact-area">
-                            <form id="contactForm">
+                            <form action="/Send-mail-contactus" method="post">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -422,3 +418,15 @@
             </div>
         </section>
         <!-- Contact Section End -->
+
+{{#if success}}
+    <script>
+    Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: 'تمت العملية بنجاح',
+        showConfirmButton: false,
+        timer: 1500
+    })
+    </script>        
+{{/if}} 

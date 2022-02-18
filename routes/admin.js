@@ -17,26 +17,40 @@ const senmessge  =  require("../middleware/sendmessage");
 const admincontroller = require('../controller/admincontroller');
 
 router.get('/', isLoggedIn,function(req, res, next) {
-    var users = 0 ;
-    User.find({ type: "user" }, (err , result)=>{
-        users += result.length;
-        console.log("count is : " + result.length);
+    var obj = {}; // {} will create an object  
+    User.find({ type: "user" }).count(function(err, count){
+        console.log('count users : ',count)
+        obj['users'] = count;
     });
-    var vendors    = User.find({type: "vendor"}).count();
-    var deleveries = User.find({type: "delevery"}).count();
-    var counteries = Countery.find().count();
-    var coupons    = Coupon.find().count();
-    var orders     = Order.find().count();
-    var goverments = Goverment.find().count();
-    var cities     = City.find().count();
-    var subcat     = Subcat.find().count();
-    var cat        = Cat.find().count();
-    var counts     = {
-        users , vendors , deleveries ,counteries , coupons , orders ,
-        goverments , cities , subcat , cat
-    };
-    console.log("users is : "+users);
-    res.render('home', { title: 'Admin Home', counts :  counts ,layout: 'layout/admin' });
+    User.find({type: "vendor"}).count(function(err, count){
+        obj['vendors'] = count;
+    });
+    User.find({type: "delevery"}).count(function(err, count){
+        obj['deleveries'] = count;
+    });
+    Countery.find().count(function(err, count){
+        obj['counteries'] = count;
+    });
+    Coupon.find().count(function(err, count){
+        obj['coupons'] = count;
+    });
+    Order.find().count(function(err, count){
+        obj['orders'] = count;
+    });
+    Goverment.find().count(function(err, count){
+        obj['goverments'] = count;
+    });
+    City.find().count(function(err, count){
+        obj['cities'] = count;
+    });
+    Subcat.find().count(function(err, count){
+        obj['subcat'] = count;
+    });
+    Cat.find().count(function(err, count){
+        obj['cat'] = count;
+    });
+    console.log(obj);
+    res.render('home', { title: 'Admin Home', counts:obj,layout: 'layout/admin' });
 });
 /////////////Start Notifications*/////////////////
 router.get('/notifications', isLoggedIn,function(req, res, next) {
@@ -44,7 +58,9 @@ router.get('/notifications', isLoggedIn,function(req, res, next) {
         if(err){
             console.log(err);
         }
-        res.render('notifications/index', { title: 'notifications',notifications : result, layout: 'layout/admin' });
+        console.log(result);
+        var success = req.flash('success-notify');
+        res.render('notifications/index', { title: 'notifications',notifications : result, layout: 'layout/admin', success : success });
     }).populate('user');
 });
 router.post('/post-notifications', isLoggedIn,function(req, res, next) {
@@ -65,7 +81,8 @@ router.post('/post-notifications', isLoggedIn,function(req, res, next) {
             });
         }
     });
-    return res.redirect('admin/notifications');
+    req.flash('success-notify',"done");
+    return res.redirect('/admin/notifications');
 });
 /////////////End Notifications*/////////////////
 router.get('/reports', isLoggedIn,function(req, res, next) {

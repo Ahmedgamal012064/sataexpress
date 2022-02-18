@@ -8,7 +8,8 @@ allsubcats = function(req, res, next) {
             res.redirect('/admin/subcats');
         }
         console.log(result);
-        res.render('subcats/index', { title: 'Subcats',subcats : result, layout: 'layout/admin' });
+        var success = req.flash('success-subcats');
+        res.render('subcats/index', { title: 'Subcats',subcats : result, layout: 'layout/admin' , success : success});
     });
 }; //all subcats  
 
@@ -23,6 +24,7 @@ Insersubcats = function(req, res, next) {
             res.redirect('/admin/subcats');
         }
         console.log(result);
+        req.flash('success-subcats',"done");
         res.redirect('/admin/subcats');
     });
 }; //Insert subcats
@@ -40,6 +42,7 @@ updatesubcats = function(req, res, next) {
             return ;
         }
         console.log(result);
+        req.flash('success-subcats',"done");
         res.redirect('/admin/subcats');
     });
 }; //Updateuser

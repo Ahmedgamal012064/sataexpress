@@ -29,6 +29,7 @@
         <!-- Favicon Link -->
         <link rel="icon" type="image/png" href="/Adminlook/images/logo/logo.png">  
         <link href="https://fonts.googleapis.com/css?family=Cairo&display=swap" rel="stylesheet"> 
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
 
     <body>
@@ -105,7 +106,7 @@
             <!-- For Mobile Device -->
             <div class="mobile-nav">
                 <a href="" class="logo">
-                    <img src="/Adminlook/images/logo/logo.png" alt="logo">
+                    <img src="/Adminlook/images/logo/logo.png" alt="logo" style="height: 35px;">
                 </a>
             </div>
         
@@ -264,5 +265,33 @@
         <script src="/frontend/js/meanmenu.js"></script>
         <!-- Custom JS -->
         <script src="/frontend/js/custom.js"></script>
+
+<script>
+    $(document).ready(function(){
+            $(document).on( 'click','#my_form #submit', function(e) {
+                e.preventDefault();
+                var id = $("#my_form #idorder").val();
+                if(id === ""){
+                $("#my_form #idorder").focus();
+                Swal.fire('لا يمكن ترك الحقل فارغ')
+        }else{
+        $.ajax({
+            url: '/Trace-Order',
+            type: 'POST',
+            data: {
+                id: id
+            },
+            success: function (response) {
+                Swal.fire(response.data[0].status)
+            },
+            error: function (err) {
+                Swal.fire("حدث خطأ قد يكون رقم المعرق خطأ")
+            },
+        });
+                /**Ajax code ends**/
+        }
+            });
+        });
+</script>
     </body>
 </html>

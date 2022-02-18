@@ -22,7 +22,8 @@ allusers = function(req, res, next) {
             res.redirect('/');
         }
         console.log(result);
-        res.render('users/index',{title:'All Users',type:type, users : result,layout: 'layout/admin' });
+        var success = req.flash('success-user');
+        res.render('users/index',{title:'All Users',type:type, users : result,layout: 'layout/admin' , success : success});
     }).populate('countery');
 }; //all users
 
@@ -51,6 +52,7 @@ Inseruser = function(req, res, next) {
                 res.redirect('/admin/users/'+req.body.type);
             }
             console.log(result);
+            req.flash('success-user',"done");
             res.redirect('/admin/users/'+req.body.type);
         });
     });
@@ -71,6 +73,7 @@ updateuser = function(req, res, next) {
             return ;
         }
         console.log(result);
+        req.flash('success-user',"done");
         res.redirect('/admin/users/'+req.body.type);
     });
 }; //Updateuser

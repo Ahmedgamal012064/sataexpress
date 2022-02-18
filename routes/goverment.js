@@ -6,7 +6,7 @@ const Goverment = require('../models/goverment');
 const Countery = require('../models/countery');
 const govermentcontrller  = require('../controller/govermentcontroller');
 
-router.get('/', govermentcontrller.allgoverments);
+router.get('/', isLoggedIn,govermentcontrller.allgoverments);
 
 router.get('/create', function(req, res, next) {
     Countery.find({},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
@@ -18,9 +18,9 @@ router.get('/create', function(req, res, next) {
             res.render('goverments/create', { title: 'Create-Goverments',cats : result,layout: 'layout/admin' });
     });
 });
-router.post('/store', govermentcontrller.Insergoverments);
+router.post('/store', isLoggedIn,govermentcontrller.Insergoverments);
 
-router.get('/edit/:id', function(req, res, next) {
+router.get('/edit/:id', isLoggedIn,function(req, res, next) {
     var countries = '' ;
     Countery.find({},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
         if(err){
@@ -38,8 +38,17 @@ router.get('/edit/:id', function(req, res, next) {
         res.render('goverments/edit',{title : 'Edit-Goverment',goverment : result,countries:countries, layout: 'layout/admin' });
     });
 });
-router.post('/update', govermentcontrller.updategoverments);
+router.post('/update', isLoggedIn,govermentcontrller.updategoverments);
 
-router.get('/delete/:id', govermentcontrller.deletegoverments);
+router.get('/delete/:id', isLoggedIn,govermentcontrller.deletegoverments);
+
+function isLoggedIn(req, res, next) {
+    if(!req.isAuthenticated()) {
+        console.log(req.isAuthenticated());
+        res.redirect('/Login');
+        return ;
+    }
+    return next();
+}
 
 module.exports = router;

@@ -14,9 +14,7 @@ router.get('/finished', isLoggedIn,ordercontroller.finishedorders);
 router.get('/cancel', isLoggedIn,ordercontroller.cancelorders);
 
 
-router.get('/detail/:id', isLoggedIn,function(req, res, next) {
-        res.render('order/detail',{title : 'Detail-Order', layout: 'layout/admin' });
-});
+router.get('/detail/:id', isLoggedIn,ordercontroller.detailsorders);
 
 function isLoggedIn(req, res, next) {
         if(!req.isAuthenticated()) {

@@ -8,7 +8,8 @@ allgoverments = function(req, res, next) {
             res.redirect('/admin/goverments');
         }
         console.log(result);
-        res.render('goverments/index', { title: 'Goverments',goverments : result, layout: 'layout/admin' });
+        var success = req.flash('success-goverments');
+        res.render('goverments/index', { title: 'Goverments',goverments : result, layout: 'layout/admin', success : success });
     });
 }; //all countries  
 
@@ -23,6 +24,7 @@ Insergoverments = function(req, res, next) {
             res.redirect('/admin/goverments');
         }
         console.log(result);
+        req.flash('success-goverments',"done");
         res.redirect('/admin/goverments');
     });
 }; //Insert goverments
@@ -40,6 +42,7 @@ updategoverments = function(req, res, next) {
             return ;
         }
         console.log(result);
+        req.flash('success-goverments',"done");
         res.redirect('/admin/goverments');
     });
 }; //Update goverments

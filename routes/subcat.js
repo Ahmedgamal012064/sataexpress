@@ -6,7 +6,7 @@ const Subcat = require('../models/subcat');
 const Cat = require('../models/cat');
 const subcatcontroller  = require('../controller/subcatcontroller');
 
-router.get('/', subcatcontroller.allsubcats);
+router.get('/', isLoggedIn,subcatcontroller.allsubcats);
 
 router.get('/create', function(req, res, next) {
     Cat.find({},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
@@ -18,9 +18,9 @@ router.get('/create', function(req, res, next) {
             res.render('subcats/create', { title: 'Create-Subcats',cats : result,layout: 'layout/admin' });
     });
 });
-router.post('/store', subcatcontroller.Insersubcats);
+router.post('/store', isLoggedIn,subcatcontroller.Insersubcats);
 
-router.get('/edit/:id', function(req, res, next) {
+router.get('/edit/:id', isLoggedIn,function(req, res, next) {
     var cats = '' ;
     Cat.find({},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
         if(err){
@@ -38,8 +38,18 @@ router.get('/edit/:id', function(req, res, next) {
         res.render('subcats/edit',{title : 'Edit-Subcats',subcat : result,cats:cats, layout: 'layout/admin' });
     });
 });
-router.post('/update', subcatcontroller.updatesubcats);
+router.post('/update', isLoggedIn,subcatcontroller.updatesubcats);
 
-router.get('/delete/:id', subcatcontroller.deletesubcats);
+router.get('/delete/:id', isLoggedIn,subcatcontroller.deletesubcats);
+
+
+function isLoggedIn(req, res, next) {
+    if(!req.isAuthenticated()) {
+        console.log(req.isAuthenticated());
+        res.redirect('/Login');
+        return ;
+    }
+    return next();
+}
 
 module.exports = router;

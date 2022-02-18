@@ -91,13 +91,13 @@ router.post('/create-order', authapi,function(req, res, next) {
                 if(result){
                     senmessge(result.token,"order send to you","open app to see more details");
                 }
-                var notification = new Notification({
-                    title: "order send to you",
-                    body: "open app to see more details",
-                    user: req.body.vendorid,
-                });
-                notification.save();
             });
+            var notification = new Notification({
+                title: "order send to you",
+                body: "open app to see more details",
+                user: req.body.vendorid,
+            });
+            notification.save();
             return res.status(200).json({
                 'status' : true ,
                 'meg'    : 'order created Successfully'
@@ -276,13 +276,13 @@ router.post('/request-order-vendor', authapi,function(req, res, next) {
             if(rest){
                 senmessge(rest.token,"vendor Cancel Your Order","open app to see more details");
             }
+            });
             var notification = new Notification({
                 title: "vendor Cancel Your Order",
                 body: "open app to see more details",
                 user: result.user,
             });
             notification.save();
-            });
             return res.status(200).json({
                 'status' : true ,
                 'meg'    : 'successfully Cancel order' 
@@ -299,15 +299,15 @@ router.post('/request-order-vendor', authapi,function(req, res, next) {
             }
             User.findOne({_id : result.user},"token",(err , rest)=>{
             if(rest){
-            senmessge(rest.token,"vendor Accept Your Order","open app to see more details");
+                senmessge(rest.token,"vendor Accept Your Order","open app to see more details");
             }
+            });
             var notification = new Notification({
                 title: "vendor Accept Your Order",
                 body: "open app to see more details",
                 user: result.user,
             });
             notification.save();
-            });
             User.find({type : "delevery"},"token",(err , result)=>{
                 if(err){
                     console.log(err);
@@ -347,13 +347,13 @@ router.post('/request-order-delevery', authapi,function(req, res, next) {
         if(rest){
             senmessge(rest.token,"delvery Accept Your Order","open app to see more details");
         }
+        });
         var notification = new Notification({
             title: "delvery Accept Your Order",
             body: "open app to see more details",
             user: result.user,
 		});
 		notification.save();
-        });
         return res.status(200).json({
             'status' : true ,
             'meg'    : 'successfully accept order'

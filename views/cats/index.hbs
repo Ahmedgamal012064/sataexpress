@@ -53,7 +53,7 @@
                                                         <td>
                                                             <div class="btn-group" role="group"
                                                                 aria-label="Basic example">
-                                                                <a href="/admin/cats/delete/{{this._id}}"
+                                                                <a href="/admin/cats/edit/{{this._id}}"
                                                                 class="btn btn-outline-primary btn-min-width box-shadow-3 mr-1 mb-1">تعديل</a>
 
                                                                 <a href="/admin/cats/delete/{{this._id}}"
@@ -73,3 +73,14 @@
             </div>
         </div>
     </div>
+{{#if success}}
+    <script>
+    Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: 'تمت العملية بنجاح',
+        showConfirmButton: false,
+        timer: 1500
+    })
+    </script>        
+{{/if}} 

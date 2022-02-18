@@ -35,7 +35,15 @@
                                         </ul>
                                     </div>
                                 </div>
-                                {{!-- error --}}
+                                {{#if error}}
+                                    {{#each error as |err|}}
+                                    <div class="row mr-2 ml-2" >
+                                            <button type="text" class="btn btn-lg btn-block btn-outline-danger mb-2"
+                                                    id="type-error">{{err}}
+                                            </button>
+                                    </div>
+                                    {{/each}}
+                                {{/if}} 
                                 <div class="card-content collapse show">
                                     <div class="card-body">
                                         <form class="form" action="/admin/permission/store"

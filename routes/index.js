@@ -4,10 +4,12 @@ const { check, validationResult } = require('express-validator');
 const Admin = require('../models/admin');
 const passport = require('passport');
 var nodemailer = require('nodemailer');
+const Order = require('../models/order');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express'  , layout: 'layout/layout' , success : req.session.success , error : req.session.error});
+  var success = req.flash('success-mail-contactus');
+  res.render('index', { title: 'Express'  , layout: 'layout/layout' , success : success , error : req.session.error});
 });
 
 router.get('/about-us', function(req, res, next) {
@@ -23,11 +25,13 @@ router.get('/testmonials', function(req, res, next) {
 });
 
 router.get('/request-job', function(req, res, next) {
-  res.render('job', { title: 'Request-Job'  , layout: 'layout/layout' , success : req.session.success , error : req.session.error});
+  var success = req.flash('success-mail-job');
+  res.render('job', { title: 'Request-Job'  , layout: 'layout/layout' , success : success});
 });
 
 router.get('/contact-us', function(req, res, next) {
-  res.render('contact', { title: 'Contact-Us'  , layout: 'layout/layout' , success : req.session.success , error : req.session.error});
+  var success = req.flash('success-mail-contactus');
+  res.render('contact', { title: 'Contact-Us'  , layout: 'layout/layout' , success : success});
 });
 
 //start login route
@@ -72,15 +76,15 @@ router.post('/Send-mail-contactus', function(req, res, next) {
   var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'youremail@gmail.com',
-      pass: 'yourpassword'
+      user: 'ahmedgamal012064@gmail.com',
+      pass: '#Ahmed@123'
     }
   });
   var mailOptions = {
-    from: 'youremail@gmail.com',
-    to: 'myfriend@yahoo.com',
-    subject: 'Sending Email using Node.js',
-    text: 'That was easy!'
+    from: req.body.email,
+    to: 'ahmedgamal012064@gmail.com',
+    subject: req.body.subject,
+    text: req.body.message
   };
 
   transporter.sendMail(mailOptions, function(error, info){
@@ -88,10 +92,57 @@ router.post('/Send-mail-contactus', function(req, res, next) {
       console.log(error);
     } else {
       console.log('Email sent: ' + info.response);
-      return redirect('/');
+      req.flash('success-mail-contactus',"done");
+      return res.redirect('/');
     }
   });
 });
 
+
+router.post('/Send-mail-job', function(req, res, next) {
+  var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'ahmedgamal012064@gmail.com',
+      pass: '#Ahmed@123'
+    }
+  });
+  var mailOptions = {
+    from: req.body.email,
+    to: 'ahmedgamal012064@gmail.com',
+    subject: "new job",
+    text: req.body.message
+  };
+
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+      req.flash('success-mail-job',"done");
+      return res.redirect('/request-job');
+    }
+  });
+});
+
+
+router.post('/Trace-Order',function(req, res, next) {
+  Order.find({_id : req.body.id},'status',(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
+    if(err){
+        console.log(err);
+        return res.status(500).json({
+          'data' : err ,
+          'status' : 'error',
+          'msg'    : 'done',
+        });
+    }
+    console.log(result);
+    return res.status(200).json({
+      'data'   : result ,
+      'status' : 'success',
+      'msg'    : 'done',
+    });
+  });
+});
 
 module.exports = router;

@@ -82,3 +82,14 @@
             </div>
         </div>
     </div>
+    {{#if success}}
+    <script>
+    Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: 'تمت العملية بنجاح',
+        showConfirmButton: false,
+        timer: 1500
+    })
+    </script>        
+{{/if}} 

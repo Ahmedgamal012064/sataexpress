@@ -6,14 +6,14 @@ const Countery = require('../models/countery');
 const counterycontrller  = require('../controller/counterycontroller');
 const upload   = require('../middleware/upload');
 
-router.get('/', counterycontrller.allcounteries);
+router.get('/', isLoggedIn,counterycontrller.allcounteries);
 
-router.get('/create', function(req, res, next) {
+router.get('/create', isLoggedIn,function(req, res, next) {
     res.render('countries/create', { title: 'Create-Counteries', layout: 'layout/admin' });
 });
 router.post('/store', upload.single('photo'),counterycontrller.Insercountery);
 
-router.get('/edit/:id', function(req, res, next) {
+router.get('/edit/:id', isLoggedIn,function(req, res, next) {
     Countery.findOne({_id:req.params.id},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
     if(err){
         console.log(err);
@@ -23,8 +23,17 @@ router.get('/edit/:id', function(req, res, next) {
         res.render('countries/edit',{title : 'Edit-Countery',country : result, layout: 'layout/admin' });
 });
 });
-router.post('/update', counterycontrller.updatecountery);
+router.post('/update', isLoggedIn,counterycontrller.updatecountery);
 
-router.get('/delete/:id', counterycontrller.deletecountery);
+router.get('/delete/:id', isLoggedIn,counterycontrller.deletecountery);
+
+function isLoggedIn(req, res, next) {
+    if(!req.isAuthenticated()) {
+        console.log(req.isAuthenticated());
+        res.redirect('/Login');
+        return ;
+    }
+    return next();
+}
 
 module.exports = router;

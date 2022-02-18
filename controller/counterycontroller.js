@@ -8,7 +8,8 @@ allcounteries = function(req, res, next) {
             res.redirect('/admin/countries');
         }
         console.log(result);
-        res.render('countries/index', { title: 'Counteries',countries : result, layout: 'layout/admin' });
+        var success = req.flash('success-countery');
+        res.render('countries/index', { title: 'Counteries',countries : result, layout: 'layout/admin', success : success });
     });
 }; //all countries  
 
@@ -30,6 +31,7 @@ Insercountery = function(req, res, next) {
             res.redirect('/admin/countries');
         }
         console.log(result);
+        req.flash('success-countery',"done");
         res.redirect('/admin/countries');
     });
 }; //Insert User
@@ -49,6 +51,7 @@ updatecountery = function(req, res, next) {
             return ;
         }
         console.log(result);
+        req.flash('success-countery',"done");
         res.redirect('/admin/countries');
     });
 }; //Updateuser

@@ -8,7 +8,8 @@ alladmins = function(req, res, next) {
             res.redirect('/admin/permission');
         }
         console.log(result);
-        res.render('admins/index', { title: 'Admins',admins : result, layout: 'layout/admin' });
+        var success = req.flash('success-admin');
+        res.render('admins/index', { title: 'Admins',admins : result, layout: 'layout/admin'  , success : success});
     });
 }; //all admins 
 
@@ -22,6 +23,7 @@ Inseradmins = function(req, res, next) {
             res.redirect('/admin/permission');
         }
         console.log(result);
+        req.flash('success-admin',"done");
         res.redirect('/admin/permission');
     });
 }; //Insert Admins
@@ -38,6 +40,7 @@ updateadmins = function(req, res, next) {
             return ;
         }
         console.log(result);
+        req.flash('success-admin',"done");
         res.redirect('/admin/permission');
     });
 }; //Updat Admins

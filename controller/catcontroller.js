@@ -8,7 +8,8 @@ allcats = function(req, res, next) {
             res.redirect('/admin/cats');
         }
         console.log(result);
-        res.render('cats/index', { title: 'Cats',cats : result, layout: 'layout/admin' });
+        var success = req.flash('success-cat');
+        res.render('cats/index', { title: 'Cats',cats : result, layout: 'layout/admin' , success : success });
     });
 }; //all cats  
 
@@ -22,6 +23,7 @@ Insercats = function(req, res, next) {
             res.redirect('/admin/cats');
         }
         console.log(result);
+        req.flash('success-cat',"done");
         res.redirect('/admin/cats');
     });
 }; //Insert cats
@@ -38,6 +40,7 @@ updatecats = function(req, res, next) {
             return ;
         }
         console.log(result);
+        req.flash('success-cat',"done");
         res.redirect('/admin/cats');
     });
 }; //Updateuser

@@ -8,7 +8,8 @@ allcoupons = function(req, res, next) {
             res.redirect('/admin/coupons');
         }
         console.log(result);
-        res.render('coupons/index', { title: 'Coupons',coupons : result, layout: 'layout/admin' });
+        var success = req.flash('success-coupon');
+        res.render('coupons/index', { title: 'Coupons',coupons : result, layout: 'layout/admin', success : success });
     });
 }; //all coupons  
 
@@ -25,6 +26,7 @@ Insercoupons = function(req, res, next) {
             res.redirect('/admin/coupons');
         }
         console.log(result);
+        req.flash('success-coupon',"done");
         res.redirect('/admin/coupons');
     });
 }; //Insert coupons
@@ -44,6 +46,7 @@ updatecoupons = function(req, res, next) {
             return ;
         }
         console.log(result);
+        req.flash('success-coupon',"done");
         res.redirect('/admin/coupons');
     });
 }; //Updateuser

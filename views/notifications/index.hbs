@@ -56,7 +56,7 @@
                                                         <td>{{this._id}}</td>
                                                         <td>{{this.title}}</td>
                                                         <td>{{this.body}}</td>
-                                                        <td>{{this.user->name}} | {{this.user->phone}}</td>
+                                                        <td>{{this.user.name}} | {{this.user.phone}}</td>
                                                         <td>{{this.createAt}}</td>
                                                     </tr>
                                                 {{/each}}
@@ -71,3 +71,14 @@
             </div>
         </div>
     </div>
+{{#if success}}
+    <script>
+    Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: 'تمت العملية بنجاح',
+        showConfirmButton: false,
+        timer: 1500
+    })
+    </script>        
+{{/if}} 
