@@ -37,11 +37,12 @@
                                 <div class="card-content collapse show">
                                     <div class="card-body">
                                         <form class="form" action="/admin/Update-Profile"
-                                            method="POST" enctype="multipart/form-data">
+                                            method="POST">
                                             <div class="form-body">
+                                                <input type="hidden" name="id" value="{{user._id}}">
                                                 <h4 class="form-section"><i class="ft-home"></i> بيانات الاعدادات العامة </h4>
                                                         <div class="row">
-                                                            <div class="col-md-12">
+                                                            {{!--<div class="col-md-12">
                                                                 <div class="form-group">
                                                                     <label for="projectinput1">الصورة</label>
                                                                     <input type="file" name="photo" class="form-control">
@@ -54,9 +55,9 @@
                                                                         class="form-control"
                                                                         placeholder="اسم التطبيق"
                                                                         name="name" required>
-                                                                {{!-- <span class="text-danger"></span> --}}
+                                                                    <span class="text-danger"></span>
                                                                 </div>
-                                                            </div>
+                                                            </div> 
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label for="projectinput1">  اللغة </label>
@@ -65,34 +66,34 @@
                                                                     <option value="en">الانجليزية </option>
                                                                 </select>
                                                                 </div>
-                                                            </div>
-                                                            <div class="col-md-4">
+                                                            </div>--}}
+                                                            <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label for="projectinput1">عمولة الموقع</label>
                                                                     <input type="number" id="name"
                                                                         class="form-control"
                                                                         placeholder="عمولة الموقع"
-                                                                        name="sitepercent" required>
+                                                                        name="sitepercent" required value="{{user.sitepercent}}">
                                                                 {{!-- <span class="text-danger"></span> --}}
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-4">
+                                                            {{!-- <div class="col-md-4">
                                                                 <div class="form-group">
                                                                     <label for="projectinput1">عمولة التجار</label>
                                                                     <input type="number" id="name"
                                                                         class="form-control"
                                                                         placeholder="عمولة التجار"
-                                                                        name="vendorpercent" required>
-                                                                {{!-- <span class="text-danger"></span> --}}
+                                                                        name="vendorpercent" required value="{{--user.vendorpercent--}}">
+                                                                    {{!-- <span class="text-danger"></span>
                                                                 </div>
-                                                            </div>
-                                                            <div class="col-md-4">
+                                                            </div>  --}}
+                                                            <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label for="projectinput1">عمولة المندوب</label>
                                                                     <input type="number" id="name"
                                                                         class="form-control"
                                                                         placeholder="عمولة المندوب"
-                                                                        name="deleverypercent" required>
+                                                                        name="deleverypercent" required value="{{user.deleverypercent}}">
                                                                 {{!-- <span class="text-danger"></span> --}}
                                                                 </div>
                                                             </div>
@@ -160,7 +161,7 @@
                                                                         <input type="tel" id="name"
                                                                             class="form-control"
                                                                             placeholder="01**********"
-                                                                            name="">
+                                                                            name="phone" value="{{user.phone}}">
                                                                     {{!-- <span class="text-danger"></span> --}}
                                                                     </div>
                                                                 </div>
@@ -170,7 +171,7 @@
                                                                         <input type="tel" id="name"
                                                                             class="form-control"
                                                                             placeholder="01**********"
-                                                                            name="">
+                                                                            name="whatsapp" value="{{user.whatsapp}}">
                                                                     {{!-- <span class="text-danger"></span> --}}
                                                                     </div>
                                                                 </div>
@@ -180,7 +181,7 @@
                                                                         <input type="email" id="name"
                                                                             class="form-control"
                                                                             placeholder="example@gmail.com"
-                                                                            name="">
+                                                                            name="email" value="{{user.email}}">
                                                                     {{!-- <span class="text-danger"></span> --}}
                                                                     </div>
                                                                 </div>
@@ -190,7 +191,7 @@
                                                                         <input type="url" id="name"
                                                                             class="form-control"
                                                                             placeholder="لينك الفيس بوك"
-                                                                            name="">
+                                                                            name="facebook" value="{{user.facebook}}">
                                                                     {{!-- <span class="text-danger"></span> --}}
                                                                     </div>
                                                                 </div>
@@ -218,3 +219,14 @@
             </div>
         </div>
     </div>
+{{#if success}}
+    <script>
+    Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: 'تمت العملية بنجاح',
+        showConfirmButton: false,
+        timer: 1500
+    })
+    </script>        
+{{/if}} 

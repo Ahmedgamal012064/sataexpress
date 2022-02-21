@@ -42,8 +42,7 @@ const admin = new Admin({
         addnotifications : true ,
         viewcoupns  : true ,
         addcoupns   : true
-    } ,
-    date : new Date() ,
+    } 
 
 });
 

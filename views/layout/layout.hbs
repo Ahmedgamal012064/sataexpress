@@ -24,6 +24,7 @@
         <link rel="stylesheet" href="/frontend/css/responsive.css">
         <!-- RTL CSS -->
         <link rel="stylesheet" href="/frontend/css/rtl.css">
+        <script src="https://cdn.jsdelivr.net/npm/translate@1/translate.min.js"></script>
         <!-- Title CSS -->
         <title>SataExpress</title>
         <!-- Favicon Link -->
@@ -127,16 +128,33 @@
                                     <a href="/feature" class="nav-link">مايميزنا</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="/about-us" class="nav-link"> من نحن </a>
+                                    <a href="#" class="nav-link dropdown-toggle">خدماتنا</a>
+                                    <ul class="dropdown-menu">
+                                        <li class="nav-item">
+                                            <a href="/one" class="nav-link">شحن محلى</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="/two" class="nav-link">شحن دولي من مصر</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="/tree" class="nav-link">شحن دولي إلي مصر</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="/four" class="nav-link">شحن بضائع</a>
+                                        </li>
+                                    </ul>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="/testmonials" class="nav-link">اراء العملاء</a>
+                                    <a href="/about-us" class="nav-link"> من نحن </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="/request-job" class="nav-link"> طلب وظيفة</a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="/contact-us" class="nav-link">  اتصل بنا</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/en" class="nav-link"> English</a>
                                 </li>
                             </ul>
                         </div>
@@ -214,16 +232,16 @@
                                 <h3>خدماتنا</h3>
                                 <ul>
                                     <li class="nav-item">
-                                        <a href="#feature" class="nav-link">نقل جوي</a>
+                                        <a href="#feature" class="nav-link">شحن محلى</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="#about" class="nav-link">نقل بري </a>
+                                        <a href="#about" class="nav-link">شحن دولي من مصر </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="#testmonial" class="nav-link">شحن داخي</a>
+                                        <a href="#testmonial" class="nav-link">شحن دولي إلي مصر</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="#contact" class="nav-link">شحن خارجي</a>
+                                        <a href="#contact" class="nav-link">شحن بضائع</a>
                                     </li>
                                 </ul>
                             </div>
@@ -285,7 +303,7 @@
                 Swal.fire(response.data[0].status)
             },
             error: function (err) {
-                Swal.fire("حدث خطأ قد يكون رقم المعرق خطأ")
+                Swal.fire("حدث خطأ قد يكون رقم المعرف خطأ")
             },
         });
                 /**Ajax code ends**/

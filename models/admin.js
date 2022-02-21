@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt-nodejs');
 const adminSchema = mongoose.Schema({
-    name: {type: String, required: true},
-    imagePath: {type: String, required: true},
+    name: {type: String},
+    imagePath: {type: String},
     email: {type: String, required: true},
     phone : {type: Number} ,
     whatsapp : {type: String} ,
@@ -33,9 +33,8 @@ const adminSchema = mongoose.Schema({
         addnotifications : Boolean ,
         viewcoupns  : Boolean ,
         addcoupns   : Boolean
-    }, required: true} ,
-    date : {type: String, required: true} ,
-});
+    }} ,
+},{ timestamps: true });
 
 
 adminSchema.methods.encryptPassword = function (password) {

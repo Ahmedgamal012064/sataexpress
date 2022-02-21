@@ -89,11 +89,32 @@ router.get('/reports', isLoggedIn,function(req, res, next) {
     res.render('reports/index', { title: 'reports', layout: 'layout/admin' });
 });
 router.get('/Profile', isLoggedIn,function(req, res, next) {
-    res.render('auth/profile', { title: 'Admin Profile', layout: 'layout/admin' });
+    var user = req.user;
+    var success = req.flash('success-profile');
+    res.render('auth/profile', { title: 'Admin Profile', layout: 'layout/admin' , user : user , success : success });
 });
 
 router.post('/Update-Profile', isLoggedIn,function(req, res, next) {
-    res.send('update profile');
+    var profile = {
+        sitepercent     : req.body.sitepercent ,
+        deleverypercent : req.body.deleverypercent ,
+        currency        : req.body.currency ,
+        waypay          : req.body.waypay ,
+        phone           : req.body.phone ,
+        whatsapp        : req.body.whatsapp ,
+        email           : req.body.email ,
+        facebook        : req.body.facebook ,
+    };
+    Admin.updateOne({_id:req.body.id}, {$set : {profile}},(error , result)=>{
+        if(error){
+            console.log(error );
+            res.redirect('/admin/Profile');
+            return ;
+        }
+        console.log(result);
+        req.flash('success-profile',"done");
+        res.redirect('/admin/Profile');
+    });
 });
 
 router.get('/permission', isLoggedIn,admincontroller.alladmins);

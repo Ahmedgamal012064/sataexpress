@@ -7,7 +7,7 @@ const userSchema = mongoose.Schema({
     email: {type: String, required: true},
     countery: {type: Schema.Types.ObjectId ,  ref: 'Countery'},
     type: {type: String, required: true},
-    status: {type: Number, required: true},
+    status: {type: Number},
     password: {type: String, required: true} ,
     birthday: {type: Date},
     gender: {type: String},
@@ -16,6 +16,7 @@ const userSchema = mongoose.Schema({
     address : {type: String} ,
     lat: {type: String},
     lang: {type: String},
+    wallet : {type: String},
 },{ timestamps: true });
 
 

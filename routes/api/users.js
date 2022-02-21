@@ -550,7 +550,7 @@ router.get('/All-Addresses', authapi,function(req, res, next) {
 router.get('/wallet',authapi,function(req, res, next) {
 
     var price = 0;
-    Order.find({trader:req.user.id},(err , result)=>{
+    Order.find({delvery:req.user.id},(err , result)=>{
         if(err){
             return res.status(400).json({
                 'status' : false ,
@@ -572,9 +572,10 @@ router.get('/wallet',authapi,function(req, res, next) {
             });
         }
         console.log(result);
+        User.updateOne({_id:req.user.id}, {$set : {wallet :  price * result.sitepercent/100}},(error , result)=>{});
         return res.status(200).json({
             'status' : true ,
-            'data'   :  price == 0 ? 0 : price - result.sitepercent ,
+            'data'   : price * result.sitepercent/100 ,
             'meg'    : 'successfully'
         });
     });

@@ -5,11 +5,31 @@ const Admin = require('../models/admin');
 const passport = require('passport');
 var nodemailer = require('nodemailer');
 const Order = require('../models/order');
+const translate =  require('translate');
+
+// async function translateString( str, translateTo ) {
+
+// 	translate.engine = 'libre';
+// 	const translated_string = await translate(str, translateTo);
+// 	console.log(translated_string);
+
+// }
+
+// // English to Spanish
+// translateString('Hello World', "ru");
 
 /* GET home page. */
+// router.get('/', function(req, res, next) {
+//   if(req.session.lang){
+//   res.redirect('/'+req.session.lang)
+//   }else{
+//     res.redirect('/ar')
+//   }
+// });
 router.get('/', function(req, res, next) {
   var success = req.flash('success-mail-contactus');
-  res.render('index', { title: 'Express'  , layout: 'layout/layout' , success : success , error : req.session.error});
+  req.session.lang = req.params.lang;
+  res.render('index', { title: 'Express'  , layout: 'layout/layout' , success : success , error : req.session.error ,   lang : req.session.lang});
 });
 
 router.get('/about-us', function(req, res, next) {
@@ -19,6 +39,21 @@ router.get('/about-us', function(req, res, next) {
 router.get('/feature', function(req, res, next) {
   res.render('feature', { title: 'Feature'  , layout: 'layout/layout' , success : req.session.success , error : req.session.error});
 });
+
+/******Start services****/
+router.get('/one', function(req, res, next) {
+  res.render('services/one', { title: 'one'  , layout: 'layout/layout'});
+});
+router.get('/two', function(req, res, next) {
+  res.render('services/two', { title: 'two'  , layout: 'layout/layout'});
+});
+router.get('/tree', function(req, res, next) {
+  res.render('services/tree', { title: 'tree'  , layout: 'layout/layout'});
+});
+router.get('/four', function(req, res, next) {
+  res.render('services/four', { title: 'four'  , layout: 'layout/layout'});
+});
+/******End services****/
 
 router.get('/testmonials', function(req, res, next) {
   res.render('testmonials', { title: 'Testmonials'  , layout: 'layout/layout' , success : req.session.success , error : req.session.error});

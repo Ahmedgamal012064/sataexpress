@@ -11,8 +11,11 @@ const passport  = require('passport');
 const jwt   = require('jsonwebtoken');
 const cors =  require('cors');
 
+
+
 //Start Define view Routes
 var indexRouter      = require('./routes/index');
+var langRouter      = require('./routes/lang');
 var usersRouter      = require('./routes/users');
 var adminRouter      = require('./routes/admin');
 var counteryRouter   = require('./routes/countery');
@@ -60,6 +63,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //Start Define Views File Route
 app.use('/', indexRouter);
+app.use('/en',langRouter);
 app.use('/admin/users', usersRouter);
 app.use('/admin',adminRouter);
 app.use('/admin/countries',counteryRouter);
