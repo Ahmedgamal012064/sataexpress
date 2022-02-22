@@ -24,12 +24,6 @@ const adminSchema = mongoose.Schema({
         addcat       : Boolean ,
         orders       : Boolean ,
         reports      : Boolean ,
-        viewcity     : Boolean ,
-        addcity      : Boolean ,
-        viewcountery : Boolean ,
-        addcountery  : Boolean ,
-        viewgovernment : Boolean ,
-        addgovernment  : Boolean ,
         addnotifications : Boolean ,
         viewcoupns  : Boolean ,
         addcoupns   : Boolean

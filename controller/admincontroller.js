@@ -15,7 +15,25 @@ alladmins = function(req, res, next) {
 
 Inseradmins = function(req, res, next) {
     const admin = new Admin({
-        name : req.body.name
+        name   : req.body.name ,
+        type   : req.body.type ,
+        email  : req.body.email ,
+        password : new Admin().encryptPassword(req.body.password),
+        permission      : {
+            viewvendors  : req.body.vendors ? true : false ,
+            addvendors   : req.body.vendors ? true : false ,
+            viewusers    : req.body.users ? true : false ,
+            addusers     : req.body.users ? true : false ,
+            viewdelevery : req.body.deleveries ? true : false ,
+            adddelevery  : req.body.deleveries ? true : false ,
+            viewcat      : req.body.cats ? true : false ,
+            addcat       : req.body.cats ? true : false ,
+            orders       : req.body.orders ? true : false ,
+            reports      : req.body.reports ? true : false ,
+            addnotifications : req.body.notifications ? true : false ,
+            viewcoupns  : req.body.coupons ? true : false ,
+            addcoupns   : req.body.coupons ? true : false ,
+        } 
     });
     admin.save((error,result)=>{
         if(error){
@@ -31,7 +49,25 @@ Inseradmins = function(req, res, next) {
 updateadmins = function(req, res, next) {
     const id = req.body.id;
     const updateadmin = {
-        name : req.body.name,
+        name   : req.body.name  ,
+        type   : req.body.type  ,
+        email  : req.body.email ,
+        password : new Admin().encryptPassword(req.body.password),
+        permission      : {
+            viewvendors  : req.body.vendors ? true : false ,
+            addvendors   : req.body.vendors ? true : false ,
+            viewusers    : req.body.users ? true : false ,
+            addusers     : req.body.users ? true : false ,
+            viewdelevery : req.body.deleveries ? true : false ,
+            adddelevery  : req.body.deleveries ? true : false ,
+            viewcat      : req.body.cats ? true : false ,
+            addcat       : req.body.cats ? true : false ,
+            orders       : req.body.orders ? true : false  ,
+            reports      : req.body.reports ? true : false ,
+            addnotifications : req.body.notifications ? true : false ,
+            viewcoupns  : req.body.coupons ? true : false ,
+            addcoupns   : req.body.coupons ? true : false ,
+        } 
     }
     Admin.updateOne({_id:id}, {$set : updateadmin},(error , result)=>{
         if(error){

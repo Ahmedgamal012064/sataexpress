@@ -15,42 +15,10 @@ const User = require('../models/user');
 const senmessge  =  require("../middleware/sendmessage");
 
 const admincontroller = require('../controller/admincontroller');
+const { route } = require('.');
 
 router.get('/', isLoggedIn,function(req, res, next) {
-    var obj = {}; // {} will create an object  
-    User.find({ type: "user" }).count(function(err, count){
-        console.log('count users : ',count)
-        obj['users'] = count;
-    });
-    User.find({type: "vendor"}).count(function(err, count){
-        obj['vendors'] = count;
-    });
-    User.find({type: "delevery"}).count(function(err, count){
-        obj['deleveries'] = count;
-    });
-    Countery.find().count(function(err, count){
-        obj['counteries'] = count;
-    });
-    Coupon.find().count(function(err, count){
-        obj['coupons'] = count;
-    });
-    Order.find().count(function(err, count){
-        obj['orders'] = count;
-    });
-    Goverment.find().count(function(err, count){
-        obj['goverments'] = count;
-    });
-    City.find().count(function(err, count){
-        obj['cities'] = count;
-    });
-    Subcat.find().count(function(err, count){
-        obj['subcat'] = count;
-    });
-    Cat.find().count(function(err, count){
-        obj['cat'] = count;
-    });
-    console.log(obj);
-    res.render('home', { title: 'Admin Home', counts:obj,layout: 'layout/admin' });
+    res.render('home', { title: 'Admin Home',layout: 'layout/admin' });
 });
 /////////////Start Notifications*/////////////////
 router.get('/notifications', isLoggedIn,function(req, res, next) {
@@ -98,6 +66,7 @@ router.post('/Update-Profile', isLoggedIn,function(req, res, next) {
     var profile = {
         sitepercent     : req.body.sitepercent ,
         deleverypercent : req.body.deleverypercent ,
+        vendorpercent   : req.body.vendorpercent ,
         currency        : req.body.currency ,
         waypay          : req.body.waypay ,
         phone           : req.body.phone ,
@@ -105,7 +74,7 @@ router.post('/Update-Profile', isLoggedIn,function(req, res, next) {
         email           : req.body.email ,
         facebook        : req.body.facebook ,
     };
-    Admin.updateOne({_id:req.body.id}, {$set : {profile}},(error , result)=>{
+    Admin.updateOne({_id:req.body.id}, {$set : profile},(error , result)=>{
         if(error){
             console.log(error );
             res.redirect('/admin/Profile');
@@ -127,16 +96,16 @@ router.get('/permission/edit/:id', isLoggedIn,function(req, res, next) {
             res.redirect('/admin/permission');
         }
             console.log(result);
-            res.render('admins/edit',{title : 'Edit-Admin',country : result, layout: 'layout/admin' });
+            res.render('admins/edit',{title : 'Edit-Admin',admin : result, layout: 'layout/admin' });
     });
 });
-router.post('/permission/update', isLoggedIn,admincontroller.Inseradmins);
+router.post('/permission/update', isLoggedIn,admincontroller.updateadmins);
 
 
 router.get('/permission/create', isLoggedIn,function(req, res, next) {
     res.render('admins/create', { title: 'Create-Admins', layout: 'layout/admin' });
 });
-router.post('/permission/store', isLoggedIn,admincontroller.updateadmins);
+router.post('/permission/store', isLoggedIn,admincontroller.Inseradmins);
 
 router.get('/delete/:id', isLoggedIn,admincontroller.deleteadmins);
 
@@ -154,4 +123,88 @@ function isLoggedIn(req, res, next) {
     return next();
 }
 
+
+/////////////////////Start Count//////////////////////////
+router.get('/orders-count' , function(req , res , next){
+    Order.find().count(function(err, count){
+        return res.status(200).json({
+            'status' : true ,
+            'data'   : count ,
+            'meg'    : 'done'
+        });
+    });
+});
+router.get('/accept-orders-count' , function(req , res , next){
+    Order.find({ status: "finished" }).count(function(err, count){
+        return res.status(200).json({
+            'status' : true ,
+            'data'   : count ,
+            'meg'    : 'done'
+        });
+    });
+});
+router.get('/pending-orders-count' , function(req , res , next){
+    Order.find({ status: "pendingdelevery" }).count(function(err, count){
+        return res.status(200).json({
+            'status' : true ,
+            'data'   : count ,
+            'meg'    : 'done'
+        });
+    });
+});
+router.get('/cancel-orders-count' , function(req , res , next){
+    Order.find({ status: "cancel" }).count(function(err, count){
+        return res.status(200).json({
+            'status' : true ,
+            'data'   : count ,
+            'meg'    : 'done'
+        });
+    });
+});
+router.get('/users-count' , function(req , res , next){
+    User.find({ type: "user" }).count(function(err, count){
+        return res.status(200).json({
+            'status' : true ,
+            'data'   : count ,
+            'meg'    : 'done'
+        });
+    });
+});
+router.get('/vendors-count' , function(req , res , next){
+    User.find({ type: "vendor" }).count(function(err, count){
+        return res.status(200).json({
+            'status' : true ,
+            'data'   : count ,
+            'meg'    : 'done'
+        });
+    });
+});
+router.get('/deleveries-count' , function(req , res , next){
+    User.find({ type: "delevery" }).count(function(err, count){
+        return res.status(200).json({
+            'status' : true ,
+            'data'   : count ,
+            'meg'    : 'done'
+        });
+    });
+});
+/////////////////////End   Count//////////////////////////
+// Countery.find().count(function(err, count){
+//     obj['counteries'] = count;
+// });
+// Coupon.find().count(function(err, count){
+//     obj['coupons'] = count;
+// });
+// Goverment.find().count(function(err, count){
+//     obj['goverments'] = count;
+// });
+// City.find().count(function(err, count){
+//     obj['cities'] = count;
+// });
+// Subcat.find().count(function(err, count){
+//     obj['subcat'] = count;
+// });
+// Cat.find().count(function(err, count){
+//     obj['cat'] = count;
+// });
 module.exports = router;

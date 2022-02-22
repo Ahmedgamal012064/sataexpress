@@ -128,8 +128,6 @@
 
             <li class="nav-item"><a href=""><i class="la la-users"></i>
                     <span class="menu-title" data-i18n="nav.dash.main">التجار</span>
-                    <span
-                        class="badge badge badge-info badge-pill float-right mr-2">0</span>
                 </a>
                 <ul class="menu-content">
                     <li><a class="menu-item" href="/admin/users/traders"
@@ -143,8 +141,6 @@
 
             <li class="nav-item"><a href=""><i class="la la-male"></i>
                     <span class="menu-title" data-i18n="nav.dash.main">العملاء</span>
-                    <span
-                        class="badge badge badge-success badge-pill float-right mr-2">0</span>
                 </a>
                 <ul class="menu-content">
                     <li><a class="menu-item" href="/admin/users/client"
@@ -158,8 +154,6 @@
 
             <li class="nav-item"><a href=""><i class="la la-users"></i>
                     <span class="menu-title" data-i18n="nav.dash.main">المندوبين</span>
-                    <span
-                        class="badge badge badge-warning badge-pill float-right mr-2">0</span>
                 </a>
                 <ul class="menu-content">
                     <li><a class="menu-item" href="/admin/users/deleveries"
@@ -174,8 +168,6 @@
         
             <li class="nav-item"><a href=""><i class="la la-tasks"></i>
                 <span class="menu-title" data-i18n="nav.dash.main"> التصنيفات </span>
-                <span
-                    class="badge badge badge-success badge-pill float-right mr-2">0</span>
             </a>
             <ul class="menu-content">
                 <li><a class="menu-item" href="/admin/cats"
@@ -199,8 +191,6 @@
             <li class="nav-item">
                 <a href=""><i class="la la-compass"></i>
                     <span class="menu-title" data-i18n="nav.dash.main">المواقع</span>
-                    <span
-                        class="badge badge badge-primary badge-pill float-right mr-2">0</span>
                 </a>
                 <ul class="menu-content">
                     <li><a class="menu-item" href="/admin/countries"
@@ -230,7 +220,6 @@
             <li class="nav-item">
                 <a href=""><i class="la la-book"></i>
                     <span class="menu-title" data-i18n="nav.dash.main"> كوبونات الخصم  </span>
-                    <span class="badge badge badge-warning badge-pill float-right mr-2">0</span>
                 </a>
                 <ul class="menu-content">
                     <li><a class="menu-item" href="/admin/coupons" 
@@ -245,7 +234,6 @@
             <li class="nav-item">
                 <a href=""><i class="la la-bullhorn"></i>
                     <span class="menu-title" data-i18n="nav.dash.main">الطلبات</span>
-                    <span class="badge badge badge-info badge-pill float-right mr-2">0</span>
                 </a>
                 <ul class="menu-content">
                     <li><a class="menu-item" href="/admin/orders" 
@@ -266,7 +254,6 @@
             <li class="nav-item">
                 <a href="/admin/notifications"><i class="la la-send"></i>
                     <span class="menu-title" data-i18n="nav.dash.main">الاشعارات</span>
-                    <span class="badge badge badge-success badge-pill float-right mr-2">0</span>
                 </a>
     
             </li>
@@ -274,7 +261,6 @@
             <li class="nav-item">
                 <a href=""><i class="la la-gear"></i>
                     <span class="menu-title" data-i18n="nav.dash.main">الاعدادات</span>
-                    <span class="badge badge badge-primary badge-pill float-right mr-2">0</span>
                 </a>
                 <ul class="menu-content">
                     <li><a class="menu-item" href="/admin/Profile" 
@@ -439,6 +425,33 @@ $('body').click(function(){
          $('.nav-link.nav-menu-main.menu-toggle.hidden-xs').removeClass('is-active');
         $('#navbar-mobile22').removeClass('show');
     });
+
+    ///function count
+        function count(route , element){
+            $(document).ready(function(){
+                /**Ajax code Start**/
+                $.ajax({
+                    url: route,
+                    type: 'GET',
+                    data: {},
+                    success: function (response) {
+                        $(element).html(response.data);
+                    },
+                    error: function (err) {
+                        Swal.fire("حدث خطأ")
+                    },
+                });
+                /**Ajax code ends**/
+            });
+        }
+        count('/admin/orders-count' , '.orders');
+        count('/admin/users-count' , '.users');
+        count('/admin/accept-orders-count' , '.acceptorders'); 
+        count('/admin/pending-orders-count' , '.pendingorders'); 
+        count('/admin/cancel-orders-count' , '.cancelorders'); 
+        count('/admin/vendors-count' , '.vendors'); 
+        count('/admin/deleveries-count' , '.deleveries'); 
 </script>
+
 </body>
 </html>

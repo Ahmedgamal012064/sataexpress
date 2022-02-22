@@ -256,7 +256,7 @@ router.post('/request-price',function(req, res, next) {
             });
         }
         console.log(result);
-        var price = (meter / 1000) * result.deleverypercent;
+        var price = (meter / 1000) * result.vendorpercent;
         return res.status(200).json({
             'status' : true ,
             'data'   : price - subtract ,
