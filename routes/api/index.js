@@ -11,8 +11,10 @@ const upload   = require('../../middleware/upload');
 const jwt   = require('jsonwebtoken');
 const JWT_SECRET = "sata express";
 
+
 router.get('/counteries', function(req, res, next) {
-    Countery.find({},'name photo code',(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
+
+    Countery.find({},'name name_en photo code',(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
         if(err){
             return res.status(400).json({
                 'status' : false ,
@@ -84,7 +86,8 @@ router.get('/locations', function(req, res, next) {
 });
 
 router.get('/cats', function(req, res, next) {
-    Cat.find({},'name',(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
+	
+    Cat.find({},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
         if(err){
             return res.status(400).json({
                 'status' : false ,

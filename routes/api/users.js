@@ -38,11 +38,14 @@ router.post('/create-order', authapi,function(req, res, next) {
                 }
                 if(result){
                 result.forEach(function(resu,index,arr){
-                    senmessge(resu.token,"You have new Order","open app to see more details");
+                    senmessge(resu.token,"You have new Order | لديك طلب جديد","open app to see more details |  افتح الطبيق لرؤية الطلب ");
                     var notification = new Notification({
-                        title: "You have new Order",
-                        body: "open app to see more details",
+                        title_en: "You have new Order",
+                        title: "لديك طلب جديد",
+                        body_en: "some one make a new order",
+                        body: "قام احد الاشخاص بطلب توصيل جديد",
                         user: resu._id,
+                        type :"user"
                     });
                     notification.save();
                 });
@@ -89,13 +92,16 @@ router.post('/create-order', authapi,function(req, res, next) {
                     });
                 }
                 if(result){
-                    senmessge(result.token,"order send to you","open app to see more details");
+                    senmessge(result.token,"order send to you | لديك طلب جديد","open app to see more details | افتح الطبيق لرؤية الطلب");
                 }
             });
             var notification = new Notification({
-                title: "order send to you",
-                body: "open app to see more details",
+                title_en: "order send to you",
+                title: "لديك طلب جديد",
+                body_en: "some one make a new order",
+                body: "قام احد الاشخاص بطلب توصيل جديد",
                 user: req.body.vendorid,
+                type :"user"
             });
             notification.save();
             return res.status(200).json({
@@ -222,7 +228,7 @@ router.get('/orders-delevery-pending',authapi,function(req, res, next) {
 });
 
 router.get('/notifications',authapi,function(req, res, next) {
-    //return senmessge("fvPUyg1kzEHfrW_PvdjyVN:APA91bF40oR3LsbH3ZqpPgk-YtHLRy8sCx4u6HVEk7PyoPjB-B1k9yDcKkqhoxTp4RC5pgQDSfsBaz2xQWHiLf-4jj44emstKSWYB-4Arv5hDGw5cLL1CF97vFfppL1yBaVJ3In3LBLo","order send to you","open app to see more details");
+    
     Notification.find({user:req.user.id},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
         if(err){
             return res.status(400).json({
@@ -274,13 +280,16 @@ router.post('/request-order-vendor', authapi,function(req, res, next) {
             }
             User.findOne({_id : result.user},"token",(err , rest)=>{
             if(rest){
-                senmessge(rest.token,"vendor Cancel Your Order","open app to see more details");
+                senmessge(rest.token,"vendor Cancel Your Order | المتجر قام بالغاء الطلب","open app to see more details | افتح الطبيق لرؤية الطلب");
             }
             });
             var notification = new Notification({
-                title: "vendor Cancel Your Order",
-                body: "open app to see more details",
-                user: result.user,
+               title_en: "vendor Cancel Your Order",
+		title: "المتجر قام بالغاء الطلب",
+		body_en: "vendor Cancel Your Order",
+		body: "المتجر قام بالغاء الطلب",
+		user: result.user,
+		type :"user"
             });
             notification.save();
             return res.status(200).json({
@@ -299,13 +308,17 @@ router.post('/request-order-vendor', authapi,function(req, res, next) {
             }
             User.findOne({_id : result.user},"token",(err , rest)=>{
             if(rest){
-                senmessge(rest.token,"vendor Accept Your Order","open app to see more details");
+                senmessge(rest.token,"vendor Accept Your Order | المتجر قام بالموافقة علي الطلب","open app to see more details | افتح الطبيق لرؤية الطلب");
             }
             });
             var notification = new Notification({
-                title: "vendor Accept Your Order",
-                body: "open app to see more details",
-                user: result.user,
+                title_en: "vendor Accept Your Order",
+		title: "المتجر قام بالموافقة الطلب",
+		body_en: "vendor Accept Your Order",
+		body: "المتجر قام بالموافقة الطلب",
+	        user: result.user,
+		type :"user"
+     
             });
             notification.save();
             User.find({type : "delevery"},"token",(err , result)=>{
@@ -335,7 +348,7 @@ router.post('/request-order-vendor', authapi,function(req, res, next) {
 router.post('/request-order-delevery', authapi,function(req, res, next) {
     const id = req.body.id;
     const iddelevery = req.user.id;
-    Order.updateOne({_id:id}, {$set : {status : "accept", delvery : iddelevery}},(error , result)=>{
+    Order.updateOne({_id:id}, {$set : {status : req.body.status, delvery : iddelevery}},(error , result)=>{
         if(error){
             return res.status(400).json({
                 'status' : false ,
@@ -345,13 +358,16 @@ router.post('/request-order-delevery', authapi,function(req, res, next) {
         }
         User.findOne({_id : result.user},"token",(err , rest)=>{
         if(rest){
-            senmessge(rest.token,"delvery Accept Your Order","open app to see more details");
+            senmessge(rest.token,"delvery "+req.body.status+" Your Order  | المندوب "+req.body.status+" طلبكم","open app to see more details | افتح الطبيق لرؤية الطلب");
         }
         });
         var notification = new Notification({
-            title: "delvery Accept Your Order",
-            body: "open app to see more details",
-            user: result.user,
+			title:  "المندوب "+req.body.status+" طلبكم",
+			title_en: "delvery "+req.body.status+" Your Order",
+			body: "المندوب "+req.body.status+" طلبكم",
+			body_en: "delvery "+req.body.status+" Your Order",
+			user: result.user,
+			type :"user"
 		});
 		notification.save();
         return res.status(200).json({
@@ -378,36 +394,34 @@ router.post('/request-order-user', authapi,function(req, res, next) {
                 'meg'    : 'error'
             });
         }
-        User.findOne({_id : result.user},"token",(err , rest)=>{
-        if(rest){
-            senmessge(rest.token,"user "+req.body.status+" Order","open app to see more details");
-		}
-		var notification = new Notification({
-            title: "user "+req.body.status+" Order",
-            body: "open app to see more details",
-            user: result.user,
-		});
-		notification.save();
-        });
+    
         User.findOne({_id : result.trader},"token",(err , rest)=>{
         if(rest){
-            senmessge(rest.token,"user "+req.body.status+" Order","open app to see more details");
+            senmessge(rest.token,"user "+req.body.status+" Order |  العميل "+req.body.status+" طلبكم","open app to see more details | افتح الطبيق لرؤية الطلب"");
 		}
 		var notification = new Notification({
-            title: "user "+req.body.status+" Order",
-            body: "open app to see more details",
-            user: result.trader,
+			title:  "العميل "+req.body.status+" طلبكم",
+			title_en:  "user "+req.body.status+" Order",
+			body: "العميل "+req.body.status+" طلبكم",
+			body_en: "user "+req.body.status+" Your Order",
+		        user: result.trader,
+			type :"user"
+		  
 		});
 		notification.save();
         });
 	User.findOne({_id : result.delvery},"token",(err , rest)=>{
 	if(rest){	
-		senmessge(rest.token,"user "+req.body.status+" Order","open app to see more details");
+		senmessge(rest.token,"user "+req.body.status+" Order |  العميل "+req.body.status+" طلبكم","open app to see more details | افتح الطبيق لرؤية الطلب"");
 		}
 		var notification = new Notification({
-            title: "user "+req.body.status+" Order",
-            body: "open app to see more details",
-            user: result.delvery,
+
+		       title:  "العميل "+req.body.status+" طلبكم",
+			title_en:  "user "+req.body.status+" Order",
+			body: "العميل "+req.body.status+" طلبكم",
+			body_en: "user "+req.body.status+" Your Order",
+		        user: result.delvery,
+			type :"user"
 		});
 		notification.save();
 		

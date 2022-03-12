@@ -34,7 +34,7 @@ var indexRouterapi      = require('./routes/api/index');
 var app = express();
 app.use(cors());
 //Connect to database
-mongoose.connect('mongodb+srv://sataexpress:sataexpress%402203@cluster0.kkwcw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',{ useNewUrlParser: true},(err)=>{ //mongodb+srv://sataexpress:sataexpress%402203@cluster0.kkwcw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+mongoose.connect('mongodb+srv://sataexpress:sataexpress%402203@cluster0.kkwcw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',{ useNewUrlParser: true},(err)=>{ //
   if(err){
     console.log("Error MongoDB : "+err);
   }else{
