@@ -397,7 +397,7 @@ router.post('/request-order-user', authapi,function(req, res, next) {
     
         User.findOne({_id : result.trader},"token",(err , rest)=>{
         if(rest){
-            senmessge(rest.token,"user "+req.body.status+" Order |  العميل "+req.body.status+" طلبكم","open app to see more details | افتح الطبيق لرؤية الطلب"");
+            senmessge(rest.token,"user "+req.body.status+" Order |  العميل "+req.body.status+" طلبكم","open app to see more details | افتح الطبيق لرؤية الطلب");
 		}
 		var notification = new Notification({
 			title:  "العميل "+req.body.status+" طلبكم",
@@ -412,7 +412,7 @@ router.post('/request-order-user', authapi,function(req, res, next) {
         });
 	User.findOne({_id : result.delvery},"token",(err , rest)=>{
 	if(rest){	
-		senmessge(rest.token,"user "+req.body.status+" Order |  العميل "+req.body.status+" طلبكم","open app to see more details | افتح الطبيق لرؤية الطلب"");
+		senmessge(rest.token,"user "+req.body.status+" Order |  العميل "+req.body.status+" طلبكم","open app to see more details | افتح الطبيق لرؤية الطلب");
 		}
 		var notification = new Notification({
 
