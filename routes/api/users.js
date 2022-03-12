@@ -515,14 +515,18 @@ router.post('/update-password', authapi,function(req, res, next) {
 
 
 router.post('/Add-Addresses', authapi,function(req, res, next) {
+	const names = req.body.address;
+
+	names.forEach(function(item, index, arr){
+	
 
         const address = new Address({
-            name    : req.body.name    ,
-            email   : req.body.email   ,
-            phone   : req.body.phone   ,
-            address : req.body.address ,
-            lat     : req.body.lat     ,
-            lang    : req.body.lat     ,
+            name    : req.body.name[index]    ,
+            email   : req.body.email[index]   ,
+            phone   : req.body.phone [index]  ,
+            address : req.body.address[index] ,
+            lat     : req.body.lat [index]    ,
+            lang    : req.body.lat [index]    ,
             user    : req.user.id 
         });
         address.save().
@@ -539,6 +543,7 @@ router.post('/Add-Addresses', authapi,function(req, res, next) {
                 'meg'    : 'error'
             });
         });
+    });
 });
 
 router.get('/All-Addresses', authapi,function(req, res, next) {
