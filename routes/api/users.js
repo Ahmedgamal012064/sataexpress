@@ -515,7 +515,7 @@ router.post('/update-password', authapi,function(req, res, next) {
 
 
 router.post('/Add-Addresses', authapi,function(req, res, next) {
-	const names = decodeURI(req.body.address);
+	const names = req.body.address.split('-');
 
 	names.forEach(function(item, index, arr){
 	
