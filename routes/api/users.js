@@ -387,11 +387,6 @@ router.post('/request-order-user', authapi,function(req, res, next) {
         notes  : req.body.notes
     };
     
-     return res.status(200).json({
-            'status' : true ,
-            'data'   : updateorder ,
-            'meg'    : 'successfully'
-        });
     Order.updateOne({_id:id}, {$set : updateorder},(error , result)=>{
         if(error){
             return res.status(400).json({
