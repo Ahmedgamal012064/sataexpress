@@ -28,7 +28,7 @@ router.post('/create-order', authapi,function(req, res, next) {
             lang      : req.body.lang,
             address2  : req.body.address2,
             lat2      : req.body.lat2,
-            lang2     : req.body.lang2
+            lang2     : req.body.lang2 ,
         });
         order.save().
         then(result=>{
@@ -386,6 +386,12 @@ router.post('/request-order-user', authapi,function(req, res, next) {
         rate   : req.body.rate ,
         notes  : req.body.notes
     };
+    
+     return res.status(200).json({
+            'status' : true ,
+            'data'   : updateorder ,
+            'meg'    : 'successfully'
+        });
     Order.updateOne({_id:id}, {$set : updateorder},(error , result)=>{
         if(error){
             return res.status(400).json({
@@ -415,7 +421,6 @@ router.post('/request-order-user', authapi,function(req, res, next) {
 		senmessge(rest.token,"user "+req.body.status+" Order |  العميل "+req.body.status+" طلبكم","open app to see more details | افتح الطبيق لرؤية الطلب");
 		}
 		var notification = new Notification({
-
 		       title:  "العميل "+req.body.status+" طلبكم",
 			title_en:  "user "+req.body.status+" Order",
 			body: "العميل "+req.body.status+" طلبكم",
@@ -428,7 +433,7 @@ router.post('/request-order-user', authapi,function(req, res, next) {
         });
         return res.status(200).json({
             'status' : true ,
-            'meg'    : 'successfully finished order'
+            'meg'    : 'successfully'
         });
     });
 });
