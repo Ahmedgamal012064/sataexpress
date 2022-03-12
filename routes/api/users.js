@@ -521,12 +521,12 @@ router.post('/Add-Addresses', authapi,function(req, res, next) {
 	
 
         const address = new Address({
-            name    : req.body.name[index]    ,
-            email   : req.body.email[index]   ,
-            phone   : req.body.phone [index]  ,
-            address : req.body.address[index] ,
-            lat     : req.body.lat [index]    ,
-            lang    : req.body.lat [index]    ,
+            name    : req.body.name.split('-').[index]    ,
+            email   : req.body.email.split('-').[index]   ,
+            phone   : req.body.phone.split('-').[index]  ,
+            address : req.body.address.split('-').[index] ,
+            lat     : req.body.lat.split('-').[index]    ,
+            lang    : req.body.lat.split('-').[index]    ,
             user    : req.user.id 
         });
         address.save().
