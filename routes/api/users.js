@@ -517,16 +517,16 @@ router.post('/update-password', authapi,function(req, res, next) {
 router.post('/Add-Addresses', authapi,function(req, res, next) {
 	const names = req.body.address.split('-');
 
-	names.forEach(function(item, index, arr){
+	names.forEach(function(item, index){
 	
 
         const address = new Address({
-            name    : req.body.name.split('-').[index]    ,
-            email   : req.body.email.split('-').[index]   ,
-            phone   : req.body.phone.split('-').[index]  ,
-            address : req.body.address.split('-').[index] ,
-            lat     : req.body.lat.split('-').[index]    ,
-            lang    : req.body.lat.split('-').[index]    ,
+            name    : req.body.name.split('-')[index]    ,
+            email   : req.body.email.split('-')[index]   ,
+            phone   : req.body.phone.split('-')[index]  ,
+            address : item ,
+            lat     : req.body.lat.split('-')[index]    ,
+            lang    : req.body.lat.split('-')[index]    ,
             user    : req.user.id 
         });
         address.save().
