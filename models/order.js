@@ -7,6 +7,7 @@ const orderSchema = mongoose.Schema({
     delvery: {type: Schema.Types.ObjectId ,  ref: 'User'},
     trader: {type: Schema.Types.ObjectId ,  ref: 'User'},
     status: {type: String, required: true},
+    isfinish :  {type: Boolean},
     price: {type: Number, required: true},
     reply: {type: String},
     weight: {type: Number, required: true },
