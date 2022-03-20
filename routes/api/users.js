@@ -348,7 +348,7 @@ router.post('/request-order-vendor', authapi,function(req, res, next) {
 router.post('/request-order-delevery', authapi,function(req, res, next) {
     const id = req.body.id;
     const iddelevery = req.user.id;
-    Order.updateOne({_id:id}, {$set : {status : req.body.status, delvery : iddelevery}},(error , result)=>{
+    Order.updateOne({_id:id}, {$set : req.body.status == "finished" ? {status : req.body.status, delvery : iddelevery , isfinish : true} : {status : req.body.status, delvery : iddelevery}},(error , result)=>{
         if(error){
             return res.status(400).json({
                 'status' : false ,
