@@ -178,6 +178,10 @@ router.post('/signup-verify-mobile', function(req, res, next) {
 });
 
 router.post('/signup-complete', upload.array('images[]',3),function(req, res, next) { //upload.single('image')
+    return res.status(200).json({
+	'status' : true ,
+	'data'    : req.body
+    });
     User.findOne({email:req.body.email},(err , result)=>{
         if(err){
             return res.status(500).json({
@@ -213,8 +217,8 @@ router.post('/signup-complete', upload.array('images[]',3),function(req, res, ne
 //         }
         if(req.files.length > 0){
             let path = '';
-            req.files.forEach(function(files,index,arr){
-                path = path + files.path + ',';
+            req.files.forEach(function(file,index,arr){
+                path = path + file.path + ',';
             });
             path = path.substring(0,path.lastIndexOf(","));
             user.images = path;
