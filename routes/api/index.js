@@ -180,7 +180,7 @@ router.post('/signup-verify-mobile', function(req, res, next) {
 router.post('/signup-complete', upload.array('images[]',3),function(req, res, next) { //upload.single('image')
     return res.status(200).json({
 	'status' : true ,
-	'data'    : req.body
+	'data'    : req.files
     });
     User.findOne({email:req.body.email},(err , result)=>{
         if(err){
