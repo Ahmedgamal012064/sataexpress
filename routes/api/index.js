@@ -208,9 +208,9 @@ router.post('/signup-complete', upload.array('images[]',3),function(req, res, ne
             lat: req.body.lat ? req.body.lat  : 0 ,
             lang: req.body.lang ? req.body.lat  : 0,
         });
-        // if(req.file){
-        //     user.images = req.file.path;
-        // }
+//         if(req.file){
+//             user.images = req.file.path;
+//         }
         if(req.files){
             let path = '';
             req.files.forEach(function(files,index,arr){
