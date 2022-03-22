@@ -211,7 +211,7 @@ router.post('/signup-complete', upload.array('images[]',3),function(req, res, ne
 //         if(req.file){
 //             user.images = req.file.path;
 //         }
-        if(req.files){
+        if(req.files.length > 0){
             let path = '';
             req.files.forEach(function(files,index,arr){
                 path = path + files.path + ',';
