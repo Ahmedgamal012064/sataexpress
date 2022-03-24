@@ -9,6 +9,8 @@ const Admin      = require('../../models/admin');
 const Order      = require('../../models/order');
 const upload   = require('../../middleware/upload');
 const jwt   = require('jsonwebtoken');
+const fs = require('fs');
+const mime = require('mime');
 const JWT_SECRET = "sata express";
 
 
@@ -211,14 +213,28 @@ router.post('/signup-complete',upload.single('image'),function(req, res, next) {
 	if(req.file){
 	    user.images = req.file.path;
 	}
-//         if(req.files){
-//             let path = '';
-//             req.files.forEach(function(file,index,arr){
-//                 path = path + file.path + ',';
-//             });
-//             path = path.substring(0,path.lastIndexOf(","));
-//             user.images = path;
-//         }
+       /* if(req.files){
+            let path = '';
+            req.files.forEach(function(files,index,arr){
+                path = path + files.path + ',';
+            });
+            path = path.substring(0,path.lastIndexOf(","));
+            user.images = path;
+        } */
+        
+        if(req.body.image){
+          var matches = req.body.image.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
+          response = {};
+           response.type = matches[1];
+	    response.data = new Buffer(matches[2], 'base64');
+	    let decodedImg = response;
+	    let imageBuffer = decodedImg.data;
+	    let type = decodedImg.type;
+	    let extension = mime.extension(type);
+	    let fileName =  Date.now() + extension;
+           fs.writeFileSync("./uploads/" + fileName, imageBuffer, 'utf8');
+           user.images = "uploads/"+fileName;
+        }
         user.save().
         then(result=>{
             let token = jwt.sign({id  : user._id , type : user.type},JWT_SECRET ,{});//expiresIn : '1h'
