@@ -33,10 +33,17 @@ const admin = new Admin({
         addcat       : true ,
         orders       : true ,
         reports      : true ,
+        viewcity     : true ,
+        addcity      : true ,
+        viewcountery : true ,
+        addcountery  : true ,
+        viewgovernment : true ,
+        addgovernment  : true ,
         addnotifications : true ,
         viewcoupns  : true ,
         addcoupns   : true
-    } 
+    } ,
+    date : new Date() ,
 
 });
 

@@ -58,12 +58,25 @@
                                                                     <input type="file" name="photo" class="form-control">
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-12">
+                                                            
+                                                            <div class="col-md-6">
                                                                 <div class="form-group">
-                                                                    <label for="projectinput1">الاسم</label>
-                                                                    <input type="text" value="{{cat.name}}" id="name"
+                                                                    <label for="projectinput1">الاسم باللغة العربية</label>
+                                                                    <input type="text" id="name"
                                                                         class="form-control"
-                                                                        name="name">
+                                                                         value="{{cat.name}}"
+                                                                        name="name" required>
+                                                                {{!-- <span class="text-danger"></span> --}}
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label for="projectinput1">الاسم باللغة الانجليزية</label>
+                                                                    <input type="text" id="name_en"
+                                                                        class="form-control"
+                                                                        value="{{cat.name_en}}"
+                                                                        name="name_en" required>
                                                                 {{!-- <span class="text-danger"></span> --}}
                                                                 </div>
                                                             </div>

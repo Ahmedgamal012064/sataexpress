@@ -13,6 +13,8 @@ router.get('/finished', isLoggedIn,ordercontroller.finishedorders);
 
 router.get('/cancel', isLoggedIn,ordercontroller.cancelorders);
 
+router.get('/finish/:id', isLoggedIn,ordercontroller.finishorders);
+
 
 router.get('/detail/:id', isLoggedIn,ordercontroller.detailsorders);
 

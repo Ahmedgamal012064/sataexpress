@@ -88,7 +88,21 @@ $('.dynamic-height').DataTable( {
 ***************************************/
 
 $('.scroll-horizontal').DataTable( {
-    "scrollX": true
+    "scrollX": true ,
+    "language": {
+        "loadingRecords": "جارٍ التحميل...",
+        "lengthMenu": "أظهر _MENU_ مدخلات",
+        "zeroRecords": "لم يعثر على أية سجلات",
+        "info": "إظهار _START_ إلى _END_ من أصل _TOTAL_ مدخل",
+        "infoFiltered": "(منتقاة من مجموع _MAX_ مُدخل)",
+        "search": "ابحث:",
+        "paginate": {
+            "first": "الأول",
+            "previous": "السابق",
+            "next": "التالي",
+            "last": "الأخير"
+        }
+    }
 } );
 
 /**************************************************

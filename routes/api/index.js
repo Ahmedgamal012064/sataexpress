@@ -4,13 +4,14 @@ const { check, validationResult } = require('express-validator');
 const Countery = require('../../models/countery');
 const User     = require('../../models/user');
 const Cat      = require('../../models/cat');
-const Coupon      = require('../../models/coupon');
-const Admin      = require('../../models/admin'); 
-const Order      = require('../../models/order');
+const Coupon   = require('../../models/coupon');
+const Admin    = require('../../models/admin'); 
+const Order    = require('../../models/order');
 const upload   = require('../../middleware/upload');
-const jwt   = require('jsonwebtoken');
-const fs = require('fs');
-const mime = require('mime');
+const Banner   = require('../../models/banner');
+const jwt      = require('jsonwebtoken');
+const fs       = require('fs');
+const mime     = require('mime');
 const JWT_SECRET = "sata express";
 
 
@@ -28,6 +29,26 @@ router.get('/counteries', function(req, res, next) {
         return res.status(200).json({
             'status' : true ,
             'data'   : result ,
+            'meg'    : 'successfully'
+        });
+    });
+});
+
+
+router.get('/banners', function(req, res, next) {
+
+    Banner.find({},'photo',(err , result)=>{
+        if(err){
+            return res.status(400).json({
+                'status' : false ,
+                'data'   : err ,
+                'meg'    : 'error'
+            });
+        }
+        console.log(result);
+        return res.status(200).json({
+            'status' : true ,
+            'data'   : result  ,//result ,
             'meg'    : 'successfully'
         });
     });
@@ -107,7 +128,8 @@ router.get('/cats', function(req, res, next) {
 });
 
 
-router.post('/login', function(req, res, next) {
+router.post('/login/:lang?', function(req, res, next) {
+    var lang = req.params.lang;
     User.findOne({phone:req.body.phone},(err , result)=>{ 
         if(err){
             return res.status(400).json({
@@ -121,7 +143,19 @@ router.post('/login', function(req, res, next) {
             if( !result.validPassword(req.body.password)) {
                 return res.status(400).json({
                     'status' : false ,
-                    'meg'    : 'Password Wrong'
+                    'meg'    : lang == 'en' ? 'Password Wrong' : 'كلمة السر خطأ'
+                });
+            }
+            
+            if(result.status == 0) {
+                return res.status(400).json({
+                    'status' : false ,
+                    'meg'    :  lang == 'en' ? 'wait approve from admin' : 'بانتظار تفعيل حسابكم'
+                });
+            }else if(result.status == 2){
+                  return res.status(400).json({
+                    'status' : false ,
+                    'meg'    :  lang == 'en' ? 'You are banned from admin' : 'تم حظر حسابكم تواصل مع الدعم'
                 });
             }
 	    User.updateOne({_id:result._id}, {$set : {token : req.body.token }});
@@ -130,7 +164,7 @@ router.post('/login', function(req, res, next) {
                 'status' : true ,
                 'data'   : result ,
                 'token'  : token ,
-                'meg'    : 'login successfully'
+                'meg'    :  lang == 'en' ? 'login successfully' : 'تم الدخول بنجاح'
             });
         }else{
             //check email
@@ -142,7 +176,8 @@ router.post('/login', function(req, res, next) {
     });
 });
 
-router.post('/signup-mobile', function(req, res, next) {
+router.post('/signup-mobile/:lang?', function(req, res, next) {
+     var lang = req.params.lang;
     User.findOne({phone:req.body.phone},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
         if(err){
             return res.status(400).json({
@@ -154,22 +189,23 @@ router.post('/signup-mobile', function(req, res, next) {
         if(result){
             return res.status(200).json({
                 'status' : false ,
-                'meg'    : 'Phone is already found'
+                'meg'    : lang == 'en' ? 'Phone is already found' : 'رقم الهاتف موجود من قبل'
             });
         }
 
         return res.status(200).json({
             'status' : true ,
-            'meg'    : 'Success Verify Your Number'
+            'meg'    : lang == 'en' ? 'Success Verify Your Number' : 'برجاء تفعيل '
         });
     });
 });
 
-router.post('/signup-verify-mobile', function(req, res, next) {
+router.post('/signup-verify-mobile/:lang?', function(req, res, next) {
+     var lang = req.params.lang;
     if(req.body.code == '123456'){
         return res.status(200).json({
             'status' : true ,
-            'meg'    : 'mobile phone verify successfully'
+            'meg'    :  lang == 'en' ?  'mobile phone verify successfully' : 'تم التفعيل بنجاح'
         });
     }else{
         return res.status(200).json({
@@ -179,7 +215,13 @@ router.post('/signup-verify-mobile', function(req, res, next) {
     }
 });
 
-router.post('/signup-complete',upload.single('image'),function(req, res, next) { //upload.array('images[]',3)
+router.post('/signup-complete/:lang?',function(req, res, next) { //upload.array('images[]',3)
+       var lang = req.params.lang;
+        //   return res.status(200).json({
+        //         'status' : true ,
+        //         'data'   : req.body ,
+        //         'meg'    : 'done'
+        //     });
     User.findOne({email:req.body.email},(err , result)=>{
         if(err){
             return res.status(500).json({
@@ -191,7 +233,7 @@ router.post('/signup-complete',upload.single('image'),function(req, res, next) {
         if(result){
             return res.status(200).json({
                 'status' : false ,
-                'meg'    : 'Email is already found'
+                'meg'    :  lang == 'en' ? 'Email is already found' : 'الايميل موجود من قبل'
             });
         }
 
@@ -201,7 +243,7 @@ router.post('/signup-complete',upload.single('image'),function(req, res, next) {
             email : req.body.email,
             phone  : req.body.phone,
             countery : req.body.countery,
-            status: 2,
+            status: req.body.type == "user" ? 1 : 0,
             birthday: req.body.birthday,
             gender: req.body.gender,
             password : new User().encryptPassword(req.body.password),
@@ -210,9 +252,9 @@ router.post('/signup-complete',upload.single('image'),function(req, res, next) {
             lat: req.body.lat ? req.body.lat  : 0 ,
             lang: req.body.lang ? req.body.lat  : 0,
         });
-	if(req.file){
-	    user.images = req.file.path;
-	}
+// 	if(req.file){
+// 	    user.images = req.file.path;
+// 	}
        /* if(req.files){
             let path = '';
             req.files.forEach(function(files,index,arr){
@@ -223,17 +265,22 @@ router.post('/signup-complete',upload.single('image'),function(req, res, next) {
         } */
         
         if(req.body.image){
-          var matches = req.body.image.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
-          response = {};
-           response.type = matches[1];
-	    response.data = new Buffer(matches[2], 'base64');
-	    let decodedImg = response;
-	    let imageBuffer = decodedImg.data;
-	    let type = decodedImg.type;
-	    let extension = mime.extension(type);
-	    let fileName =  Date.now() + extension;
-           fs.writeFileSync("./uploads/" + fileName, imageBuffer, 'utf8');
-           user.images = "uploads/"+fileName;
+	       let readfile = Buffer.from(req.body.image, 'base64');
+	       var path = "./uploads/" + Date.now()+"imag1";
+           fs.writeFileSync(path, readfile, 'utf8');
+           user.image = path;
+        }
+    	if(req.body.image1){
+    	   let readfile = Buffer.from(req.body.image1, 'base64');
+    	    var path = "./uploads/" + Date.now()+"imagone";
+    	   fs.writeFileSync(path, readfile, 'utf8');
+    	   user.image1 = path;
+    	}
+    	if(req.body.image2){
+    	    let readfile = Buffer.from(req.body.image2, 'base64');
+    	    var path = "./uploads/"+Date.now()+"imagtwo";
+            fs.writeFileSync(path, readfile, 'utf8');
+            user.image2 = path;
         }
         user.save().
         then(result=>{
@@ -242,7 +289,7 @@ router.post('/signup-complete',upload.single('image'),function(req, res, next) {
                 'status' : true ,
                 'data'   : result ,
                 'token'  : token ,
-                'meg'    : 'Successfully signup'
+                'meg'    : lang == 'en' ? 'Successfully signup' : 'تم بنجاح'
             });
         }).
         catch(err=>{
@@ -256,7 +303,8 @@ router.post('/signup-complete',upload.single('image'),function(req, res, next) {
 });
 
 
-router.post('/request-price',function(req, res, next) {
+router.post('/request-price/:lang?',function(req, res, next) {
+     var lang = req.params.lang;
     const meter    = req.body.meter;
     const coupon   = req.body.coupon;
     var subtract = 0 ;
@@ -279,14 +327,15 @@ router.post('/request-price',function(req, res, next) {
         return res.status(200).json({
             'status' : true ,
             'data'   : price - subtract ,
-            'meg'    : 'done'
+            'meg'    : lang == 'en' ? 'done' : 'تم بنجاح'
         });
     });
 });
 
-router.post('/trace-order',function(req, res, next) {
+router.post('/trace-order/:lang?',function(req, res, next) {
+    var lang = req.params.lang;
     const order  = req.body.order;
-    Order.find( { $or : [ { id: order }, { userphone: order } ] },(err , result)=>{
+    Order.find( { $or : [ { _id: order }, { userphone: order } ] },(err , result)=>{
         if(err){
             return res.status(400).json({
                 'status' : false ,
@@ -298,7 +347,34 @@ router.post('/trace-order',function(req, res, next) {
         return res.status(200).json({
             'status' : true ,
             'data'   : result ,
-            'meg'    : 'done'
+            'meg'    :  lang == 'en' ? 'done' : 'تم بنجاح'
+        });
+    });
+});
+
+
+router.post('/forget-pass/:lang?', function(req, res, next) {
+    var lang = req.params.lang;
+    User.findOne({phone:req.body.phone},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
+        if(err){
+            return res.status(400).json({
+                'status' : false ,
+                'data'   : err ,
+                'meg'    : 'error'
+            });
+        }
+        if(!result){
+            return res.status(200).json({
+                'status' : false ,
+                'meg'    :  lang == 'en' ? 'Phone is not found'  : 'رقم الهاتف غير موجود'
+            });
+        }
+	    
+	User.updateOne({phone:req.body.phone}, {$set : { password : new User().encryptPassword(req.body.password)}},(err , result)=>{ 
+		return res.status(200).json({
+		    'status' : true ,
+		    'meg'    :  lang == 'en' ? 'done' : 'تم بنجاح'
+		});
         });
     });
 });

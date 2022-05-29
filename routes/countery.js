@@ -9,18 +9,20 @@ const upload   = require('../middleware/upload');
 router.get('/', isLoggedIn,counterycontrller.allcounteries);
 
 router.get('/create', isLoggedIn,function(req, res, next) {
-    res.render('countries/create', { title: 'Create-Counteries', layout: 'layout/admin' });
+     var permission = req.user.permission;
+    res.render('countries/create', { title: 'Create-Counteries',permission:permission, layout: 'layout/admin' });
 });
-router.post('/store', upload.single('photo'),counterycontrller.Insercountery);
+router.post('/store', upload.single('photo'),isLoggedIn,counterycontrller.Insercountery);
 
 router.get('/edit/:id', isLoggedIn,function(req, res, next) {
+     var permission = req.user.permission;
     Countery.findOne({_id:req.params.id},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
     if(err){
         console.log(err);
         res.redirect('/admin/countries');
     }
         console.log(result);
-        res.render('countries/edit',{title : 'Edit-Countery',country : result, layout: 'layout/admin' });
+        res.render('countries/edit',{title : 'Edit-Countery',country : result,permission:permission, layout: 'layout/admin' });
 });
 });
 router.post('/update', isLoggedIn,counterycontrller.updatecountery);

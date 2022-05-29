@@ -5,31 +5,11 @@ const Admin = require('../models/admin');
 const passport = require('passport');
 var nodemailer = require('nodemailer');
 const Order = require('../models/order');
-const translate =  require('translate');
-
-// async function translateString( str, translateTo ) {
-
-// 	translate.engine = 'libre';
-// 	const translated_string = await translate(str, translateTo);
-// 	console.log(translated_string);
-
-// }
-
-// // English to Spanish
-// translateString('Hello World', "ru");
 
 /* GET home page. */
-// router.get('/', function(req, res, next) {
-//   if(req.session.lang){
-//   res.redirect('/'+req.session.lang)
-//   }else{
-//     res.redirect('/ar')
-//   }
-// });
 router.get('/', function(req, res, next) {
   var success = req.flash('success-mail-contactus');
-  req.session.lang = req.params.lang;
-  res.render('index', { title: 'Express'  , layout: 'layout/layout' , success : success , error : req.session.error ,   lang : req.session.lang});
+  res.render('index', { title: 'Express'  , layout: 'layout/layout' , success : success , error : req.session.error});
 });
 
 router.get('/about-us', function(req, res, next) {
@@ -71,8 +51,11 @@ router.get('/contact-us', function(req, res, next) {
 
 //start login route
 router.get('/Login',notLoggedIn,function(req, res, next) {
+    //   Admin.updateOne({_id:'61e5d4e1c6cb068585ada09b'}, {$set : {password : new Admin().encryptPassword('123456789')}},(error , result)=>{
+       
+    // });
   var errors = req.flash('login-error');
-  authuser = req.user;
+  var authuser = req.user;
   res.render('auth/login', { title: 'Login' , layout: 'layout/login' ,authuser:authuser, error : errors});
 });
 

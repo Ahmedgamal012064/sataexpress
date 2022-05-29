@@ -22,13 +22,10 @@ var upload = multer({
             console.log('Only image jpg or png file support');
             callback(null,false);
         }
-    } 
-    
-    /*
-         limits : {
+    },
+    limits : {
         fileSize : 1024 * 1024 * 2
     }
-    */
 });
 
 module.exports = upload

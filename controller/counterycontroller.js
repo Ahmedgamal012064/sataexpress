@@ -2,6 +2,7 @@ const Countery = require('../models/countery');
 
 allcounteries = function(req, res, next) {
     //get all countries
+     var permission = req.user.permission;
     Countery.find({},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
         if(err){
             console.log(err);
@@ -9,13 +10,14 @@ allcounteries = function(req, res, next) {
         }
         console.log(result);
         var success = req.flash('success-countery');
-        res.render('countries/index', { title: 'Counteries',countries : result, layout: 'layout/admin', success : success });
+        res.render('countries/index', { title: 'Counteries',countries : result,permission:permission, layout: 'layout/admin', success : success });
     });
 }; //all countries  
 
 Insercountery = function(req, res, next) {
     const countery = new Countery({
         name : req.body.name , 
+        name_en : req.body.name_en ,
         code : req.body.code , 
         lat:  req.body.lat ,
         lang:  req.body.lang
@@ -40,6 +42,7 @@ updatecountery = function(req, res, next) {
     const id = req.body.id;
     const updatecountery = {
         name : req.body.name,
+        name_en : req.body.name_en ,
         code : req.body.code , 
         lat:  req.body.lat ,
         lang:  req.body.lang

@@ -9,7 +9,7 @@
                                 </li>
                             <li class="breadcrumb-item"><a href="/admin/users/{{type2}}"> {{type}} </a>
                                 </li>
-                                <li class="breadcrumb-item active">اضافة محافظة
+                                <li class="breadcrumb-item active">اضافة {{type}}
                                 </li>
                             </ol>
                         </div>
@@ -62,6 +62,17 @@
                                                                 {{!-- <span class="text-danger"></span> --}}
                                                                 </div>
                                                             </div>
+                                                             <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                <label for="projectinput1">المدن</label>
+                                                                <select class="form-control" name="countery_id" required>
+                                                                    <option value="">اختر من المدن</option>
+                                                                    {{#each cats}}
+                                                                        <option value="{{this._id}}">{{this.name}}</option>
+                                                                    {{/each}}
+                                                                </select>
+                                                                </div>
+                                                            </div>
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label for="projectinput1">البريد الالكتروني</label>
@@ -74,11 +85,21 @@
                                                             </div>
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
-                                                                    <label for="projectinput1">رقم الجوال</label>
-                                                                    <input type="tel" id="name"
+                                                                    <label for="projectinput1">رقم الموبيل</label>
+                                                                    <input type="tel" id="phone"
                                                                         class="form-control"
-                                                                        placeholder="رقم الجوال"
-                                                                        name="phone" required>
+                                                                        placeholder="رقم الموبيل"
+                                                                        name="phone" required dir="ltr">
+                                                                {{!-- <span class="text-danger"></span> --}}
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label for="projectinput1">رقم  موبيل اخر</label>
+                                                                    <input type="tel" id="phone"
+                                                                        class="form-control"
+                                                                        placeholder="رقم  موبيل اخر"
+                                                                        name="phone2" dir="ltr">
                                                                 {{!-- <span class="text-danger"></span> --}}
                                                                 </div>
                                                             </div>

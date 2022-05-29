@@ -2,6 +2,7 @@ const Coupon = require('../models/coupon');
 
 allcoupons = function(req, res, next) {
     //get all coupons
+      var permission = req.user.permission;
     Coupon.find({},(err , result)=>{
         if(err){
             console.log(err);
@@ -9,7 +10,7 @@ allcoupons = function(req, res, next) {
         }
         console.log(result);
         var success = req.flash('success-coupon');
-        res.render('coupons/index', { title: 'Coupons',coupons : result, layout: 'layout/admin', success : success });
+        res.render('coupons/index', { title: 'Coupons',coupons : result,permission:permission, layout: 'layout/admin', success : success });
     });
 }; //all coupons  
 

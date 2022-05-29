@@ -9,13 +9,16 @@ var Notification = require("../../models/notification");
 const jwt   = require('jsonwebtoken');
 const authapi   = require('../../middleware/authapi');
 const senmessge  =  require("../../middleware/sendmessage");
+const Fatora = require('../../models/fatora');
 
-router.post('/create-order', authapi,function(req, res, next) {
+router.post('/create-order/:lang?', authapi,function(req, res, next) {
+     var lang = req.params.lang;
     if(!req.body.vendorid){
         const order = new Order({
             name      : req.body.name,
             user      : req.user.id,
             status    : "pendingdelevery" ,
+            statusar  : "بانتظار رد المندوب",
             weight    : req.body.weight,
             cat       : req.body.cat,
             price     : req.body.price ,
@@ -53,7 +56,7 @@ router.post('/create-order', authapi,function(req, res, next) {
             });
             return res.status(200).json({
                 'status' : true ,
-                'meg'    : 'order created Successfully'
+                'meg'    : lang == 'en' ? 'order created Successfully'  : 'تم ارسال الطلب بنجاح'
             });
         }).
         catch(err=>{
@@ -70,6 +73,7 @@ router.post('/create-order', authapi,function(req, res, next) {
             user   : req.user.id,
             trader : req.body.vendorid,
             status : "pendingvendor" ,
+            statusar : "بانتظار رد التاجر" , 
             weight : req.body.weight,
             cat    : req.body.cat,
             price  : parseInt(req.body.weight) * 10 ,
@@ -106,7 +110,7 @@ router.post('/create-order', authapi,function(req, res, next) {
             notification.save();
             return res.status(200).json({
                 'status' : true ,
-                'meg'    : 'order created Successfully'
+                'meg'    : lang == 'en' ? 'order created Successfully'  : 'تم ارسال الطلب بنجاح'
             });
         }).
         catch(err=>{
@@ -120,7 +124,7 @@ router.post('/create-order', authapi,function(req, res, next) {
 });
 
 router.get('/orders-user/:status',authapi,function(req, res, next) {
-    Order.find({user:req.user.id , status : req.params.status},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
+    Order.find({user:req.user.id , status : req.params.status == "pendingdelevery" ? { $in: [ 'donereceive', 'pendingdelevery' ] } : req.params.status },(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
         if(err){
             return res.status(400).json({
                 'status' : false ,
@@ -156,7 +160,7 @@ router.get('/orders-vendor',authapi,function(req, res, next) {
 });
 
 router.get('/orders-vendor-accept',authapi,function(req, res, next) {
-    Order.find({trader:req.user.id,status : "accept"},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
+    Order.find({trader:req.user.id,status : "accept",   statusar : "تم الموافقة من التاجر" },(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
         if(err){
             return res.status(400).json({
                 'status' : false ,
@@ -192,7 +196,7 @@ router.get('/orders-vendor-pending',authapi,function(req, res, next) {
 });
 
 router.get('/orders-delevery/:status',authapi,function(req, res, next) {
-    Order.find({delvery:req.user.id , status : req.params.status},(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
+    Order.find({delvery:req.user.id , status : req.params.status == "accept" ? { $in: [ 'donereceive', 'accept' ] } : req.params.status  },(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
         if(err){
             return res.status(400).json({
                 'status' : false ,
@@ -267,10 +271,11 @@ router.get('/vendors',authapi,function(req, res, next) {
     });
 });
 
-router.post('/request-order-vendor', authapi,function(req, res, next) {
+router.post('/request-order-vendor/:lang?', authapi,function(req, res, next) {
+    var lang = req.params.lang;
     const id = req.body.id;
     if(req.body.status == 'cancel'){
-        Order.updateOne({_id:id}, {$set : {status : "cancel"}},(error , result)=>{
+        Order.updateOne({_id:id}, {$set : {status : "cancel" , statusar : "الطلب ملغي"}},(error , result)=>{
             if(error){
                 return res.status(400).json({
                     'status' : false ,
@@ -294,11 +299,11 @@ router.post('/request-order-vendor', authapi,function(req, res, next) {
             notification.save();
             return res.status(200).json({
                 'status' : true ,
-                'meg'    : 'successfully Cancel order' 
+                'meg'    :   lang == 'en' ? 'successfully Cancel order' : 'تم بنجاح'
             });
         });
     }else if(req.body.status == 'accept'){
-        Order.updateOne({_id:id}, {$set : {status : "pendingdelevery"}},(error , result)=>{
+        Order.updateOne({_id:id}, {$set : {status : "pendingdelevery" , statusar : "بانتظار الرد من المندوب"}},(error , result)=>{
             if(error){
                 return res.status(400).json({
                     'status' : false ,
@@ -339,16 +344,17 @@ router.post('/request-order-vendor', authapi,function(req, res, next) {
             });
             return res.status(200).json({
                 'status' : true ,
-                'meg'    : 'successfully accept order'
+                'meg'    : lang == 'en' ?  'successfully accept order' : 'تم بنجاح'
             });
         });
     }
 });
 
-router.post('/request-order-delevery', authapi,function(req, res, next) {
+router.post('/request-order-delevery/:lang?', authapi,function(req, res, next) {
+     var lang = req.params.lang;
     const id = req.body.id;
     const iddelevery = req.user.id;
-    Order.updateOne({_id:id}, {$set : req.body.status == "finished" ? {status : req.body.status, delvery : iddelevery , isfinish : true} : {status : req.body.status, delvery : iddelevery}},(error , result)=>{
+    Order.updateOne({_id:id}, {$set : req.body.status == "finished" ? {status : req.body.status, statusar : "الطلب منتهي", delvery : iddelevery , isfinish : true} : {status : req.body.status, statusar : "تم الموافقة من المندوب",  delvery : iddelevery}},(error , result)=>{
         if(error){
             return res.status(400).json({
                 'status' : false ,
@@ -356,6 +362,22 @@ router.post('/request-order-delevery', authapi,function(req, res, next) {
                 'meg'    : 'error'
             });
         }
+	    
+	    
+	    /*********************************************/
+	    
+	    
+	if(req.body.status == "finished"){
+	    Order.findOne({_id:id},(err , result3)=>{
+    		Admin.findOne({email : "admin@gmail.com"},(err , result2)=>{
+    		      User.updateOne({_id:iddelevery}, { $inc: { wallet: (result3.price - (result3.price * result2.sitepercent/100))} },(error , result)=>{});
+    		});  
+	    });
+	} 
+	    
+	    /***********************************************/
+	    
+	    
         User.findOne({_id : result.user},"token",(err , rest)=>{
         if(rest){
             senmessge(rest.token,"delvery "+req.body.status+" Your Order  | المندوب "+req.body.status+" طلبكم","open app to see more details | افتح الطبيق لرؤية الطلب");
@@ -372,17 +394,19 @@ router.post('/request-order-delevery', authapi,function(req, res, next) {
 		notification.save();
         return res.status(200).json({
             'status' : true ,
-            'meg'    : 'successfully accept order'
+            'meg'    : lang == 'en' ?  'successfully accept order' : 'تم بنجاح'
         });
     });
 });
 
 
-router.post('/request-order-user', authapi,function(req, res, next) {
+router.post('/request-order-user/:lang?', authapi,function(req, res, next) {
+    var lang = req.params.lang;
     const id = req.body.id;
     const iduser = req.user.id;
     var updateorder = {
         status : req.body.status ,
+       // statusar : "الطلب ملغي" ,
         rate   : req.body.rate ,
         notes  : req.body.notes
     };
@@ -428,13 +452,14 @@ router.post('/request-order-user', authapi,function(req, res, next) {
         });
         return res.status(200).json({
             'status' : true ,
-            'meg'    : 'successfully'
+            'meg'    : lang == 'en' ?  'successfully' : 'تم بنجاح'
         });
     });
 });
 
 //////////////////////Update Profile/////////////////////////////////
-router.post('/update-profile', authapi,function(req, res, next) {
+router.post('/update-profile/:lang?', authapi,function(req, res, next) {
+     var lang = req.params.lang;
     const id = req.user.id;
     const updateuser = {
         name      : req.body.name ,
@@ -457,12 +482,13 @@ router.post('/update-profile', authapi,function(req, res, next) {
         console.log(result);
         return res.status(200).json({
             'status' : true ,
-            'meg'    : 'successfully Update Profile'
+            'meg'    :  lang == 'en' ? 'successfully Update Profile' : 'تم بنجاح'
         });
     });
 });
 
-router.post('/update-email', authapi,function(req, res, next) {
+router.post('/update-email/:lang?', authapi,function(req, res, next) {
+     var lang = req.params.lang;
     const id = req.user.id;
     const updateuser = {
         email     : req.body.email,
@@ -479,12 +505,13 @@ router.post('/update-email', authapi,function(req, res, next) {
         console.log(result);
         return res.status(200).json({
             'status' : true ,
-            'meg'    : 'successfully Update Email'
+            'meg'    :  lang == 'en' ? 'successfully Update Email' : 'تم بنجاح'
         });
     });
 });
 
-router.post('/update-password', authapi,function(req, res, next) {
+router.post('/update-password/:lang?', authapi,function(req, res, next) {
+    var lang = req.params.lang;
     const id = req.user.id;
     //if(new User().validPassword(req.body.oldpass)){
         const updateuser = {
@@ -502,7 +529,7 @@ router.post('/update-password', authapi,function(req, res, next) {
             console.log(result);
             return res.status(200).json({
                 'status' : true ,
-                'meg'    : 'successfully Update Password'
+                'meg'    :  lang == 'en' ? 'successfully Update Password' : 'تم بنجاح'
             });
         });
     // }else{
@@ -514,7 +541,8 @@ router.post('/update-password', authapi,function(req, res, next) {
 });
 
 
-router.post('/Add-Addresses', authapi,function(req, res, next) {
+router.post('/Add-Addresses/:lang?', authapi,function(req, res, next) {
+     var lang = req.params.lang;
 	const names = req.body.address.split('-');
 
 	names.forEach(function(item, index){
@@ -526,14 +554,14 @@ router.post('/Add-Addresses', authapi,function(req, res, next) {
             phone   : req.body.phone.split('-')[index]  ,
             address : item ,
             lat     : req.body.lat.split('-')[index]    ,
-            lang    : req.body.lat.split('-')[index]    ,
+            lang    : req.body.lang.split('-')[index]    ,
             user    : req.user.id 
         });
         address.save().
         then(result=>{
             return res.status(200).json({
                 'status' : true ,
-                'meg'    : 'Successfully Add Address'
+                'meg'    :  lang == 'en' ? 'Successfully Add Address' :  'تم بنجاح'
             });
         }).
         catch(err=>{
@@ -566,37 +594,70 @@ router.get('/All-Addresses', authapi,function(req, res, next) {
 });
 
 
-router.get('/wallet',authapi,function(req, res, next) {
+router.post('/Edit-Addresses/:lang?', authapi,function(req, res, next) {
+       var lang = req.params.lang;
 
-    var price = 0;
-    Order.find({delvery:req.user.id},(err , result)=>{
-        if(err){
+    const id = req.body.id;
+    const updateuser = {
+        name    : req.body.name    ,
+        email   : req.body.email   ,
+        phone   : req.body.phone  ,
+        address : req.body.address ,
+        lat     : req.body.lat    ,
+        lang    : req.body.lang    ,
+    }
+    
+    Address.updateOne({_id:id}, {$set : updateuser},(error , result)=>{
+        if(error){
             return res.status(400).json({
                 'status' : false ,
-                'data'   : err ,
+                'data'   : error ,
                 'meg'    : 'error'
             });
         }
-        result.forEach(element => {
-            console.log(element);
-            price += element.price; 
-        });
-    });
-    Admin.findOne({email : "admin@gmail.com"},"sitepercent",(err , result)=>{
-        if(err){
-            return res.status(400).json({
-                'status' : false ,
-                'data'   : err ,
-                'meg'    : 'error'
-            });
-        }
-        console.log(result);
-        User.updateOne({_id:req.user.id}, {$set : {wallet :  price * result.sitepercent/100}},(error , result)=>{});
         return res.status(200).json({
             'status' : true ,
-            'data'   : price * result.sitepercent/100 ,
+            'meg'    : lang == 'en' ? 'successfully' : 'تم بنجاح'
+        });
+    });
+});
+
+router.get('/Delete-Addresses/:id', authapi,function(req, res, next) {
+
+    const id = req.params.id;
+    Address.deleteOne({_id:id},(error,result)=>{
+        if(error){
+            return res.status(400).json({
+                'status' : false ,
+                'data'   : error ,
+                'meg'    : 'error'
+            });
+        }
+        return res.status(200).json({
+            'status' : true ,
             'meg'    : 'successfully'
         });
+    });
+});
+
+
+router.get('/wallet',authapi,function(req, res, next) {
+    User.findOne({_id : req.user.id},(err , result)=>{
+        if(err){
+            return res.status(400).json({
+                'status' : false ,
+                'data'   : err ,
+                'meg'    : 'error'
+            });
+        }
+     	Fatora.find({user : req.user.id},(err , fatoras)=>{
+              return res.status(200).json({
+                'status' : true ,
+                'data'   : result.wallet ,
+    	        'data2'  : fatoras,
+                'meg'    : 'successfully'
+              });
+     	});
     });
 });
 

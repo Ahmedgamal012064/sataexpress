@@ -2,6 +2,7 @@ const Cat = require('../models/cat');
 
 allcats = function(req, res, next) {
     //get all cats
+    var permission = req.user.permission;
     Cat.find({},'name',(err , result)=>{ // find({where(name : 'ahmed')},select('name email'),callback)
         if(err){
             console.log(err);
@@ -9,13 +10,14 @@ allcats = function(req, res, next) {
         }
         console.log(result);
         var success = req.flash('success-cat');
-        res.render('cats/index', { title: 'Cats',cats : result, layout: 'layout/admin' , success : success });
+        res.render('cats/index', { title: 'Cats',cats : result,permission:permission,  layout: 'layout/admin' , success : success });
     });
 }; //all cats  
 
 Insercats = function(req, res, next) {
     const cat = new Cat({
-        name : req.body.name
+        name : req.body.name , 
+        name_en : req.body.name_en
     });
     cat.save((error,result)=>{
         if(error){
@@ -32,6 +34,7 @@ updatecats = function(req, res, next) {
     const id = req.body.id;
     const updatecat = {
         name : req.body.name,
+         name_en : req.body.name_en
     }
     Cat.updateOne({_id:id}, {$set : updatecat},(error , result)=>{
         if(error){
